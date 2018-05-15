@@ -1,7 +1,13 @@
 <?php
-	use Twilio\Rest\Client;
+	use Twilio\Twiml;
 
-	// Your Account SID and Auth Token from twilio.com/console
+	$response = new Twiml();
+	$response->say('Hello World');
+	$response->play('https://api.twilio.com/Cowbell.mp3');
+
+	echo $response;
+
+	/*// Your Account SID and Auth Token from twilio.com/console
 	$account_sid = 'AC1a67400c4075f16f092296d0db4f8220';
 	$auth_token = '3a4e85551888226c80235d42a6f96614';
 	// In production, these should be environment variables. E.g.:
@@ -18,5 +24,5 @@
 			'from' => $twilio_number,
 			'body' => 'more shit!'
 		)
-	);
+	);*/
 ?>
