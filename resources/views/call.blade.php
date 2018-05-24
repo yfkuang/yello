@@ -7,20 +7,19 @@
 	
 	$twilio_number = "+18193030170";
 	
-	$twilio = new Client($account_sid, $auth_token);
-	$call = $twilio->calls->create("+16137971900", $twilio_number,
-                           array(
-								'method' => "GET",
-								'statusCallback' => "https://www.myapp.com/events",
-								'statusCallbackEvent' => "initiated",
-								'statusCallbackMethod' => "POST",
-								'url' => "http://phplaravel-73309-509403.cloudwaysapps.com/preface.xml"
-							)
-                  );*/
+	$twilio = new Client($account_sid, $auth_token);*/
+	$xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+	<Say voice="alice" language="en-CA">Call service provided by LeadLabs Marketing. This call is directed to Untitled Service.</Say>
+</Response>');
+
+	$xml->asXML('xml/whisper.xml');
+
 	use Twilio\Twiml;
 
 	$response = new Twiml();
-	$response->dial('+16137971900');
+	$dial = $response->dial();
+	$dial->number('+16137971900', ['url' => 'http://phplaravel-73309-509403.cloudwaysapps.com/xml/whisper.xml']);
 	
 	echo $response;
 	//$response->dial('+16137971900');

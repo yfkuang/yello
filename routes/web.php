@@ -18,3 +18,7 @@ Route::get('/', function () {
 Route::get('/call', function () {
     return view('call');
 });
+
+Route::get('/whisper', function () {
+    return view('whisper');
+});
