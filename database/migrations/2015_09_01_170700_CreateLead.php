@@ -20,6 +20,7 @@ class CreateLead extends Migration
                 $table->string('caller_name')->nullable();
                 $table->string('caller_number');
                 $table->string('call_sid');
+				$table->boolean('answered');
                 $table->timestamps();
 
                 $table->integer('lead_source_id');

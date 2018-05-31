@@ -26,6 +26,13 @@ Route::resource(
 );
 
 Route::get(
+	'whisper',
+	['as' => 'lead.whisper',
+	'uses' => 'LeadController@whisper'
+	]
+);
+
+Route::get(
     'lead/summary-by-lead-source',
     ['as' => 'lead.summary_by_lead_source',
      'uses' => 'LeadController@summaryByLeadSource'

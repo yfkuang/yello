@@ -59,18 +59,10 @@ class LeadController extends Controller
         $lead->call_sid = $request->input('CallSid');
 
         $lead->save();
-		
-		/*$xml = new SimpleXMLElement('
-			<?xml version="1.0" encoding="UTF-8"?>
-			<Response>
-				Say voice="alice" language="en-CA">Call tracking by Yello. This call is directed to '.$leadSource->description.'.</Say>
-			</Response>');
-
-		$xml->asXML('xml/whisper.xml');*/
-		
+			
         $forwardMessage = new Twiml();
         $dial = $forwardMessage->dial();
-		$dial->number($leadSource->forwarding_number, ['url' => 'http://phplaravel-73309-509403.cloudwaysapps.com/xml/whisper.xml']);//Forwards to whisper
+		$dial->number($leadSource->forwarding_number, ['url' => 'http://phplaravel-73309-509403.cloudwaysapps.com/whisper?desc='.$leadSource->description]);//Forwards to whisper
 
         return response($forwardMessage, 201)
             ->header('Content-Type', 'application/xml');
@@ -138,4 +130,15 @@ class LeadController extends Controller
             return $toNormalize;
         }
     }
+	
+	/*Creates an XML file which Twilio whispers to callee*/
+	public function whisper(){
+		$desc = $_GET["desc"];
+		$whisperMessage = new Twiml();
+		
+		$whisperMessage->say('Call tracking by Yello. This call is directed to '.$desc, ['voice' => 'alice', 'language' => 'en-CA']);
+		
+		return response($whisperMessage, 201)
+           	->header('Content-Type', 'application/xml');
+	}
 }
