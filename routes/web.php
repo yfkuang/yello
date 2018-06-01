@@ -33,6 +33,13 @@ Route::get(
 );
 
 Route::get(
+	'test',
+	['as' => 'lead.test',
+	'uses' => 'LeadController@test'
+	]
+);
+
+Route::get(
     'lead/summary-by-lead-source',
     ['as' => 'lead.summary_by_lead_source',
      'uses' => 'LeadController@summaryByLeadSource'

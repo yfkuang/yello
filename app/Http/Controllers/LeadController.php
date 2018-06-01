@@ -9,6 +9,7 @@ use DB;
 use Illuminate\Http\Request;
 use Twilio\Rest\Client;
 use Twilio\Twiml;
+use SimpleXMLElement;
 
 class LeadController extends Controller
 {
@@ -59,10 +60,23 @@ class LeadController extends Controller
         $lead->call_sid = $request->input('CallSid');
 
         $lead->save();
+		
+		$string = '<?xml version="1.0" encoding="UTF-8"?>
+			<Response>
+				<Gather input="dtmf" finishOnKey="1">
+					<Say voice="alice" language="en-CA">
+						Call tracking by Yello. This call is directed to '.$leadSource->description.'. Press one when you are ready.
+					</Say>
+				</Gather>
+			</Response>';
 			
+		$xml = new SimpleXMLElement($string);
+		
+		$xml->asXML('xml/'.$lead->lead_source_id.'_whisper.xml');
+		
         $forwardMessage = new Twiml();
         $dial = $forwardMessage->dial();
-		$dial->number($leadSource->forwarding_number, ['url' => 'http://phplaravel-73309-509403.cloudwaysapps.com/whisper?desc='.$leadSource->description]);//Forwards to whisper
+		$dial->number($leadSource->forwarding_number, ['url' => 'http://'.$_SERVER['SERVER_NAME'].'/xml/'.$lead->lead_source_id.'_whisper.xml']);//Forwards to whisper
 
         return response($forwardMessage, 201)
             ->header('Content-Type', 'application/xml');
@@ -133,12 +147,31 @@ class LeadController extends Controller
 	
 	/*Creates an XML file which Twilio whispers to callee*/
 	public function whisper(){
-		$desc = $_GET["desc"];
-		$whisperMessage = new Twiml();
+		//$desc = $_GET["desc"];
+		//$whisperMessage = new Twiml();
 		
-		$whisperMessage->say('Call tracking by Yello. This call is directed to '.$desc, ['voice' => 'alice', 'language' => 'en-CA']);
+		/*$whisperMessage->say('Call tracking by Yello. This call is directed to '.$desc, ['voice' => 'alice', 'language' => 'en-CA']);*/
 		
-		return response($whisperMessage, 201)
-           	->header('Content-Type', 'application/xml');
+		//$whisperMessage->say('This test is successsful. Try some new shit.'/*, ['voice' => 'alice', 'language' => 'en-CA']*/);
+		
+		/*return response($whisperMessage,201)
+        	->header('Content-Type', 'application/xml');*/
+	}
+	
+	/*Test page for testing whisper*/
+	public function test(){
+		
+		$sid    = env("TWILIO_ACCOUNT_SID");
+		$token  = env("TWILIO_AUTH_TOKEN");
+		$twilio = new Client($sid, $token);
+		
+		//return $sid.' '.$token;
+		$call = $twilio->calls
+					   ->create("+18192722002",
+								"+18193031829",
+								array("url" => "http://demo.twilio.com/docs/voice.xml")
+					   );
+
+		return($call->sid);
 	}
 }
