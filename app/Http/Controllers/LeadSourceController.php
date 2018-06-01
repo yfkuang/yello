@@ -134,7 +134,7 @@ class LeadSourceController extends Controller
     {
         $existingApp = $this->_twilioClient->applications->read(
             array(
-                "friendlyName" => 'Call tracking app'
+                "friendlyName" => 'Yello | Call Tracking App'
             )
         );
         if ($existingApp) {
@@ -142,7 +142,7 @@ class LeadSourceController extends Controller
         }
 
         $newApp = $this->_twilioClient->applications
-            ->create('Call tracking app');
+            ->create('Yello | Call Tracking App');
 
         return $newApp->sid;
     }

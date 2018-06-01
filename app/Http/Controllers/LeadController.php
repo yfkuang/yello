@@ -145,33 +145,23 @@ class LeadController extends Controller
         }
     }
 	
-	/*Creates an XML file which Twilio whispers to callee*/
-	public function whisper(){
-		//$desc = $_GET["desc"];
-		//$whisperMessage = new Twiml();
-		
-		/*$whisperMessage->say('Call tracking by Yello. This call is directed to '.$desc, ['voice' => 'alice', 'language' => 'en-CA']);*/
-		
-		//$whisperMessage->say('This test is successsful. Try some new shit.'/*, ['voice' => 'alice', 'language' => 'en-CA']*/);
-		
-		/*return response($whisperMessage,201)
-        	->header('Content-Type', 'application/xml');*/
-	}
-	
 	/*Test page for testing whisper*/
 	public function test(){
 		
 		$sid    = env("TWILIO_ACCOUNT_SID");
 		$token  = env("TWILIO_AUTH_TOKEN");
+		$caller = env("TEST_CALLER");
+		$callee = env("TEST_CALLEE");
 		$twilio = new Client($sid, $token);
 		
 		//return $sid.' '.$token;
 		$call = $twilio->calls
-					   ->create("+18192722002",
-								"+18193031829",
+					   ->create($callee,
+								$caller,
 								array("url" => "http://demo.twilio.com/docs/voice.xml")
 					   );
 
 		return($call->sid);
+		//return $caller.' '.$callee;
 	}
 }
