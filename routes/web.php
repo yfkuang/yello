@@ -26,15 +26,15 @@ Route::resource(
 );
 
 Route::get(
-	'whisper',
-	['as' => 'lead.whisper',
-	'uses' => 'LeadController@whisper'
+	'handleStatus',
+	['as' => 'handleStatus',
+	'uses' => 'LeadController@statusDuration'
 	]
 );
 
 Route::get(
 	'test',
-	['as' => 'lead.test',
+	['as' => 'test',
 	'uses' => 'LeadController@test'
 	]
 );

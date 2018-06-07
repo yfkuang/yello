@@ -33,9 +33,11 @@ class LeadController extends Controller
     {
         $context = [
             'leadSources' => LeadSource::all(),
+			'leads' => Lead::all()
+				->sortByDesc('created_at'), 
             'appSid' => $this->_appSid()
         ];
-
+		
         return response()->view('leads.index', $context);
     }
 
@@ -45,6 +47,7 @@ class LeadController extends Controller
      * @param  Request $request Input data
      * @return Response Twiml to redirect call to the forwarding number
      */
+	
     public function store(Request $request)
     {
         $leadSource = LeadSource::where(['number' => $request->input('To')])
@@ -76,7 +79,7 @@ class LeadController extends Controller
 		
         $forwardMessage = new Twiml();
         $dial = $forwardMessage->dial();
-		$dial->number($leadSource->forwarding_number, ['url' => 'http://'.$_SERVER['SERVER_NAME'].'/xml/'.$lead->lead_source_id.'_whisper.xml']);//Forwards to whisper
+		$dial->number($leadSource->forwarding_number, ['url' => 'http://'.$_SERVER['SERVER_NAME'].'/xml/'.$lead->lead_source_id.'_whisper.xml', 'statusCallback' => route('handleStatus')/*.'?sid='.$call_sid*/]);//Forwards to whisper
 
         return response($forwardMessage, 201)
             ->header('Content-Type', 'application/xml');
@@ -145,6 +148,18 @@ class LeadController extends Controller
         }
     }
 	
+	public function statusDuration(Request $request) {
+		$call_sid = $_GET['sid'];
+		$sid    = env("TWILIO_ACCOUNT_SID");
+		$token  = env("TWILIO_AUTH_TOKEN");
+		$twilio = new Client($sid, $token);
+		
+		$call = $twilio->calls($call_sid)->fetch();
+				
+		$call->duration = $request->input('Duration');
+		$call->status = $request->input('Status');
+	}
+	
 	/*Test page for testing whisper*/
 	public function test(){
 		
@@ -162,6 +177,5 @@ class LeadController extends Controller
 					   );
 
 		return($call->sid);
-		//return $caller.' '.$callee;
 	}
 }

@@ -8,7 +8,7 @@ use DB;
 
 class Lead extends Model
 {
-    protected $fillable = ['caller_number', 'city', 'state', 'caller_name', 'call_sid'];
+    protected $fillable = ['caller_number', 'city', 'state', 'caller_name', 'call_sid', 'duration', 'status'];
 
     public function leadSource()
     {
