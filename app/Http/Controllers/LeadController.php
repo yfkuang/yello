@@ -64,7 +64,7 @@ class LeadController extends Controller
 
         $lead->save();
 		
-		$string = '<?xml version="1.0" encoding="UTF-8"?>
+		$whisperString = '<?xml version="1.0" encoding="UTF-8"?>
 			<Response>
 				<Gather input="dtmf" finishOnKey="1">
 					<Say voice="alice" language="en-CA">
@@ -73,14 +73,21 @@ class LeadController extends Controller
 				</Gather>
 			</Response>';
 			
-		$xml = new SimpleXMLElement($string);
+		$whisper = new SimpleXMLElement($whisperString);
 		
-		$xml->asXML('xml/'.$lead->lead_source_id.'_whisper.xml');
+		$whisper->asXML('xml/'.$lead->lead_source_id.'_whisper.xml');
 		
         $forwardMessage = new Twiml();
-        $dial = $forwardMessage->dial();
-		$dial->number($leadSource->forwarding_number, ['url' => 'http://'.$_SERVER['SERVER_NAME'].'/xml/'.$lead->lead_source_id.'_whisper.xml', 'statusCallback' => route('handleStatus')/*.'?sid='.$call_sid*/]);//Forwards to whisper
-
+        $dial = $forwardMessage->dial([
+			'action' => route('handleStatus'),//.'?CallSid='.$lead->call_sid,
+			'method' => 'GET',
+		]);
+		$dial->number($leadSource->forwarding_number, [
+			'url' => 'http://'.$_SERVER['SERVER_NAME'].'/xml/'.$lead->lead_source_id.'_whisper.xml', //Forwards to whisper
+			//'statusCallbackEvent' => 'completed',
+			//'statusCallback' => route('handleStatus').'?CallSid='.$lead->call_sid
+		]);
+		
         return response($forwardMessage, 201)
             ->header('Content-Type', 'application/xml');
     }
@@ -148,16 +155,25 @@ class LeadController extends Controller
         }
     }
 	
-	public function statusDuration(Request $request) {
-		$call_sid = $_GET['sid'];
-		$sid    = env("TWILIO_ACCOUNT_SID");
+	public function statusDuration() {
+		$call_sid = $_GET['CallSid'];
+		$callStatus = $_GET['DialCallStatus'];
+		$callDuration = $_GET['DialCallDuration'];
+		/*$sid    = env("TWILIO_ACCOUNT_SID");
 		$token  = env("TWILIO_AUTH_TOKEN");
-		$twilio = new Client($sid, $token);
+		$twilio = new Client($sid, $token);*/
+        $lead = Lead::where('call_sid', $call_sid)
+			->get();
 		
-		$call = $twilio->calls($call_sid)->fetch();
+		//$call = $twilio->calls($call_sid)->fetch();
 				
-		$call->duration = $request->input('Duration');
-		$call->status = $request->input('Status');
+		$lead[0]->duration = $callDuration;//$call->duration;
+		$lead[0]->status = $callStatus;//$call->status;
+		$lead[0]->save();
+		
+		$yada = new Twiml();
+		return response($yada)
+			->header('Content-Type', 'application/xml');
 	}
 	
 	/*Test page for testing whisper*/
@@ -176,6 +192,6 @@ class LeadController extends Controller
 								array("url" => "http://demo.twilio.com/docs/voice.xml")
 					   );
 
-		return($call->sid);
+		return $call->sid;
 	}
 }

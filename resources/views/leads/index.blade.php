@@ -14,7 +14,6 @@
 			@include('lead_sources.index', ['leadSources' => $leadSources, 'appSid' => $appSid])
 		</div>
 		<div class="row">
-			<h3>Leads</h3>
 			<table class="table">
 				<thead>
 					<th>Tracking Number</th>
@@ -47,7 +46,7 @@
 								<br>
 								{{ $lead->caller_number }}
 							</td>
-							<td>{{ $lead->status }}</td>	
+							<td><span style="text-transform: capitalize">{{ $lead->status }}</span></td>	
 							<td>{{ $lead->duration }}s</td>
 							<td>{{ $lead->created_at }}</td>
 						</tr>
