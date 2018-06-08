@@ -40,6 +40,24 @@ class LeadController extends Controller
 		
         return response()->view('leads.index', $context);
     }
+	
+	/*Parse Phone numbers into a more user friendly format*/
+	public function parseNumber($number){
+		$splitNumber = str_split($number);
+		$parsedNumber = $splitNumber[0]." ".$splitNumber[1]." (".$splitNumber[2].$splitNumber[3].$splitNumber[4].") ".$splitNumber[5].$splitNumber[6].$splitNumber[7]."-".$splitNumber[8].$splitNumber[9].$splitNumber[10].$splitNumber[11];
+		
+		return response($parsedNumber);
+	}
+	
+	/**
+     * Display listing of leads specified by filter queries, based on AJAX request
+     *
+     * @return Response with all filtered leads
+     */
+	public function ajaxRequest(){
+		$leads = Lead::all();
+     	return response()->json(array('msg'=> leads), 200);
+	}
 
     /**
      * Endpoint which store a new lead with its lead source and forward the call
@@ -47,7 +65,6 @@ class LeadController extends Controller
      * @param  Request $request Input data
      * @return Response Twiml to redirect call to the forwarding number
      */
-	
     public function store(Request $request)
     {
         $leadSource = LeadSource::where(['number' => $request->input('To')])

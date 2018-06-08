@@ -39,7 +39,7 @@ Route::get(
 	]
 );
 
-Route::get(
+/*Route::get(
     'lead/summary-by-lead-source',
     ['as' => 'lead.summary_by_lead_source',
      'uses' => 'LeadController@summaryByLeadSource'
@@ -51,7 +51,7 @@ Route::get(
     ['as' => 'lead.summary_by_city',
      'uses' => 'LeadController@summaryByCity'
     ]
-);
+);*/
 
 Route::get(
     'dashboard',
@@ -62,4 +62,9 @@ Route::get(
 
 Route::resource(
     'lead', 'LeadController', ['only' => ['store']]
+);
+
+Route::post(
+	'ajaxRequest',
+	'LeadController@ajaxRequest'
 );

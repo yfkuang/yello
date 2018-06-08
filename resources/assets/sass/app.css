@@ -1,5 +1,5 @@
 /*
-Error: File to import not found or unreadable: ~bootstrap-sass/assets/stylesheets/bootstrap.
+Error: File to import not found or unreadable: node_modules/bootstrap-sass/assets/stylesheets/bootstrap.
        Load paths:
          C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/Configuration/SassFrameworks/bourbon
          C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/Configuration/SassFrameworks/neat
@@ -11,7 +11,10 @@ Error: File to import not found or unreadable: ~bootstrap-sass/assets/stylesheet
 6: @import "variables";
 7: 
 8: // Bootstrap
-9: @import "~bootstrap-sass/assets/stylesheets/bootstrap";
+9: @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+10: 
+11: //Custom
+12: @import "custom";
 
 Backtrace:
 C:\xampp\htdocs\yello\resources\assets\sass\app.scss:9
@@ -51,4 +54,4 @@ C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/ruby/bin/sass:23:in `<main>'
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: File to import not found or unreadable: ~bootstrap-sass/assets/stylesheets/bootstrap.\A        Load paths:\A          C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/Configuration/SassFrameworks/bourbon\A          C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/Configuration/SassFrameworks/neat\A          C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/Configuration/SassFrameworks/base\A         on line 9 of C:\xampp\htdocs\yello\resources\assets\sass\app.scss\A \A 4: \A 5: // Variables\A 6: @import \"variables\";\A 7: \A 8: // Bootstrap\A 9: @import \"~bootstrap-sass/assets/stylesheets/bootstrap\";"; }
+  content: "Error: File to import not found or unreadable: node_modules/bootstrap-sass/assets/stylesheets/bootstrap.\A        Load paths:\A          C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/Configuration/SassFrameworks/bourbon\A          C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/Configuration/SassFrameworks/neat\A          C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/Configuration/SassFrameworks/base\A         on line 9 of C:\xampp\htdocs\yello\resources\assets\sass\app.scss\A \A 4: \A 5: // Variables\A 6: @import \"variables\";\A 7: \A 8: // Bootstrap\A 9: @import \"node_modules/bootstrap-sass/assets/stylesheets/bootstrap\";\A 10: \A 11: //Custom\A 12: @import \"custom\";"; }

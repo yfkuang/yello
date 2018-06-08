@@ -1,9 +1,14 @@
-<html>
+<html lang="{{ app()->getLocale() }}">
     <head>
-        <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-        <link href="{{ asset('css/main.css') }}" rel="stylesheet">
-        <title>Automated surveys - @yield('title', 'Call tracking')</title>
+		<meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<meta name="csrf-token" content="{{ csrf_token() }}">
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        <title>Yello | Call Tracking by Leadlabs | @yield('title', 'Call tracking')</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<!--<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>-->
+		<script src="{{ asset('js/app.js') }}"></script>
     </head>
     <body>
         <div class="container-fluid">
@@ -29,9 +34,6 @@
             @endif
         </div>
         @yield('content')
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        @yield('scripts')
         </div>
     </body>
 </html>

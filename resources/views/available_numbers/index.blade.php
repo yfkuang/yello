@@ -9,14 +9,14 @@
     <table class="table">
         <thead>
             <th>Phone number</th>
-            <th>State</th>
+            <th>City</th>
             <th></th>
         </thead>
         <tbody>
             @foreach ($numbers as $number)
                 <tr>
                     <td> {{ $number->friendlyName }} </td>
-                    <td> {{ $number->region }} </td>
+                    <td> {{ $number->locality.", ".$number->region }} </td>
                     <td>
                         {!! Form::open(['url' => route('lead_source.store')]) !!}
                         {!! Form::hidden('phoneNumber', $number->phoneNumber) !!}
