@@ -26,38 +26,61 @@
 						{{ $leads->where('status', '!=', 'completed')->count() }} Unanswered Calls
 					</td>
 					<td>
-						{{ round($leads->where('status', 'completed')->count()/$leads->count(), 2) }}% Answer Rate
+						{{ round($leads->where('status', 'completed')->count()/$leads->count(), 2)*100 }}% Answer Rate
 					</td>
 				</tbody>
 			</table>
 		</div>
 		<div class="row">
-			<table class="table">
+			<table class="table" id="lead-table">
 				<thead>
-					<th>Tracking Number</th>
+					<th>
+						<div class="dropdown">
+						  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Tracking Number
+						  </button>
+						  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								@foreach($leadSources as $leadSource)
+									<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="leadSource" data-filter-value="{{ $leadSource->id }}">{{ $leadSource->description }} ({{ $leadSource->number }})</button>
+							  	@endforeach
+						  </div>
+						</div>
+					</th>
 					<th>Caller</th>
-					<th>Status</th>
-					<th>Duration</th>
+					<th>
+						<div class="dropdown">
+						  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Status
+						  </button>
+						  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+							<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="status" data-filter-value="completed">Completed</button>
+							<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="status" data-filter-value="no-answer">No Answer</button>
+						  </div>
+						</div>
+					</th>
+					<th>
+						Duration
+					</th>
 					<th>
 						<div class="dropdown">
 						  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							Date
 						  </button>
 						  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<button class="dropdown-item ajax-button" data-ajax="Today">Today</button>
-							<button class="dropdown-item ajax-button" data-ajax="Past Week">Past Week</button>
-							<button class="dropdown-item ajax-button" data-ajax="Past Month">Past Month</button>
-							<button class="dropdown-item ajax-button" data-ajax="Past 3 Months">Past 3 Months</button>
-							<button class="dropdown-item ajax-button" data-ajax="Past 6 Months">Past 6 Months</button>
-							<button class="dropdown-item ajax-button" data-ajax="Past Year">Past Year</button>
+							<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today() }}">Today</button>
+							<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today()->subWeek() }}">Past Week</button>
+							<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today()->subMonth() }}">Past Month</button>
+							<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today()->subMonths(3) }}">Past 3 Months</button>
+							<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today()->subMonths(6) }}">Past 6 Months</button>
+							<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today()->subYear() }}">Past Year</button>
 						  </div>
 						</div>
 					</th>
 				</thead>
 				<tbody>
 					@foreach ($leads as $lead)
-						<tr>
-							<td>
+						<tr class="lead-row">
+							<td class="lead-row-source">
 								@foreach ($leadSources as $leadSource)
 									@if ($lead->lead_source_id == $leadSource->id)
 										<strong>{{ $leadSource->description }}</strong>
@@ -69,7 +92,7 @@
 									@endif
 								@endforeach							
 							</td>
-							<td>
+							<td class="lead-row-caller">
 								@if (!$lead->caller_name)
 									<strong><em>No Caller ID</em>, {{ $lead->city }}</strong>
 								@else
@@ -78,15 +101,15 @@
 								<br>
 								{{ $lead->caller_number }}
 							</td>
-							<td>
+							<td class="lead-row-status">
 								@if (!$lead->status)
 									No Answer
 								@else	
 									<span style="text-transform: capitalize">{{ $lead->status }}</span>
 								@endif
 							</td>	
-							<td>{{ $lead->duration }}s</td>
-							<td>
+							<td class="lead-row-duration">{{ $lead->duration }}s</td>
+							<td class="lead-row-date">
 								@php $date = explode(" ", $lead->created_at->toDayDateTimeString()); @endphp
 								<strong>{{ $date[4]." ".$date[5] }}</strong><br>
 								{{ $date[0]." ".$date[1]." ".$date[2]." ".$date[3] }}

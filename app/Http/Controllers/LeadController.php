@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Twilio\Rest\Client;
 use Twilio\Twiml;
 use SimpleXMLElement;
+use Carbon\Carbon;
 
 class LeadController extends Controller
 {
@@ -54,9 +55,54 @@ class LeadController extends Controller
      *
      * @return Response with all filtered leads
      */
-	public function ajaxRequest(){
-		$leads = Lead::all();
-     	return response()->json(array('msg'=> leads), 200);
+	public function ajaxRequest(Request $request){
+		switch ($request->filter){
+			case "date":
+				$context = [
+					'leadSources' => LeadSource::all(),
+					'leads' => Lead::whereDate('created_at', '>=', $request->value)
+						->orderBy('created_at', 'desc')
+						->get(),
+					'switch' => $request->filter
+				];
+				break;
+			
+			case "status":
+				switch ($request->value) {
+					case "completed":
+						$context = [
+							'leadSources' => LeadSource::all(),
+							'leads' => Lead::where('status', 'completed')
+								->orderBy('created_at', 'desc')
+								->get(),
+							'switch' => $request->filter
+						];
+						break;
+					case "no-answer":
+						$context = [
+							'leadSources' => LeadSource::all(),
+							'leads' => Lead::where('status', '!=', 'completed')
+								->orderBy('created_at', 'desc')
+								->get(),
+							'switch' => $request->filter
+						];
+						break;
+				}
+				break;
+			
+			case "leadSource":
+				$context = [
+					'leadSources' => LeadSource::all(),
+					'leads' => Lead::where('lead_source_id', '=', $request->value)
+						->orderBy('created_at', 'desc')
+						->get(),
+					'switch' => $request->filter
+				];
+				break;
+		}
+		
+       	return response()->json($context);
+		//return response()->json($request);
 	}
 
     /**

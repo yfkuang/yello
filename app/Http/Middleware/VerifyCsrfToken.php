@@ -14,4 +14,11 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         "*lead"
     ];
+	
+	/**
+     * Determine if the session and input CSRF tokens match.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return bool
+     */
 }

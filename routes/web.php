@@ -66,5 +66,7 @@ Route::resource(
 
 Route::post(
 	'ajaxRequest',
-	'LeadController@ajaxRequest'
+	['as' => 'ajaxRequest',
+     'uses' => 'LeadController@ajaxRequest'
+    ]
 );
