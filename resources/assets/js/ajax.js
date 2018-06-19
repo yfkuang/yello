@@ -11,12 +11,16 @@ function hours_am_pm(time) {
 }
 
 $(document).ready(function(){
-	$.ajaxSetup({
+	$.ajaxSetup({//Setup X-CSRF-TOKEN verification
 		headers: {
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		}
 	});
 	
+	/**
+     * Display new data set based on button filter
+     *
+     */
 	$(".ajax-button").click(function(e){
 		e.preventDefault();
 		var dataString = {
@@ -37,9 +41,32 @@ $(document).ready(function(){
 			},*/
 			data: dataString,
 			success: function(data){
-				$('.lead-row').remove();
 				
-				jQuery.each(data.leads, function(i, val){
+				/**
+				 *
+				 *Change value in statistics table
+				 *
+				 */
+				var statTotal = data.leads.length;
+				var answered = data.leads.filter(lead => lead.status = 'completed');
+				var statAnswered = answered.length;
+				var unanswered = data.leads.filter(lead => !lead.status);
+				var statUnanswered = unanswered.length;
+				var statAnswerRate = statAnswered / statTotal * 100;
+				
+				
+				$('#stat-total').text(statTotal);
+				$('#stat-answered').text(statAnswered);
+				$('#stat-unanswered').text(statUnanswered);
+				$('#stat-answer-rate').text(statAnswerRate + "%");
+				/**
+				 *
+				 *Change values in Call Log table
+				 *
+				 */
+				$('.lead-row').remove();//Remove previous data set
+				
+				jQuery.each(data.leads, function(i, val){//Output rows based AJAX returned value
 					
 					var leadSource;
 					jQuery.each(data.leadSources, function(i, source_val){

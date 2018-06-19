@@ -17,16 +17,16 @@
 			<table class="table">
 				<tbody>
 					<td>
-						{{ $leads->count() }} Total Calls
+						<span id="stat-total">{{ $leads->count() }}</span> Total Calls
 					</td>
 					<td>
-						{{ $leads->where('status', 'completed')->count() }} Answered Calls
+						<span id="stat-answered">{{ $leads->where('status', 'completed')->count() }}</span> Answered Calls
 					</td>
 					<td>
-						{{ $leads->where('status', '!=', 'completed')->count() }} Unanswered Calls
+						<span id="stat-unanswered">{{ $leads->where('status', '!=', 'completed')->count() }}</span> Unanswered Calls
 					</td>
 					<td>
-						{{ round($leads->where('status', 'completed')->count()/$leads->count(), 2)*100 }}% Answer Rate
+						<span id="stat-answer-rate">{{ round($leads->where('status', 'completed')->count()/$leads->count(), 2)*100 }}%</span> Answer Rate
 					</td>
 				</tbody>
 			</table>
