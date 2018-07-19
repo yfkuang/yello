@@ -20,7 +20,8 @@
 				<div class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
 						<li><a href="{{ route('dashboard') }}">Dashboard</a></li>
-						<li><a href="">Add Number</a></li>
+						<li><a href="" style="border: 1px solid rgb(221, 221, 221)
+; padding: 5px 7px; margin: 13px 0; border-radius: 0.25rem;">Add Number&nbsp;&nbsp;<i class="fas fa-plus-circle" style="color: #7CD164"></i></a></li>
 					</ul>
 				</div>
 			</div>

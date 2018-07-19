@@ -84,8 +84,41 @@ footer{
 	margin-right: 15px;
 }
 
+#lead-table th{
+	border-left: 1px solid rgb(221, 221, 221);
+	margin-bottom: 20px;
+}
+
+#lead-table th:first-of-type{
+	border-left: none;
+}
+
+#lead-table .dropdown-toggle{
+	background: none;
+	padding: 0;
+	font-size: 16px;
+	font-weight: bold;
+	color: #4D85FF;
+	width: 100%;
+	text-align: left;
+}
+
+#lead-table .fa-caret-down{
+	float: right;
+	font-size: 20px;
+	margin-right: 10px;
+}
+
 .lead-row td{
 	padding: 15px 8px !important;
+}
+
+.lead-row-source{
+	max-width: 200px;
+}
+
+.lead-row-date{
+	text-align: right;
 }
 
 @media (min-width: 768px){

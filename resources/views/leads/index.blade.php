@@ -30,45 +30,51 @@
 		<div class="row">
 			<table class="table" id="lead-table">
 				<thead>
-					<th>
+					<th class="lead-row-source">
 						<div class="dropdown">
-							Tracking Number
-						 	<button class="btn dropdown-toggle-split dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<i class="fas fa-caret-down"></i>
+						 	<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Tracking Number <i class="fas fa-caret-down"></i>
 						  	</button>
 						  	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 								<input type="text" class="ajax-text" placeholder="Tracking # or description" data-token="{{ csrf_token() }}" data-filter-type="leadSourceDesc">
 								@foreach($leadSources as $leadSource)
-									<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="leadSource" data-filter-value="{{ $leadSource->id }}">{{ $leadSource->description }} ({{ $leadSource->number }})</button>
+									<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="leadSource" data-filter-value="{{ $leadSource->id }}">{{ $leadSource->description }} ({{ $leadSource->number }})</button>
 								@endforeach
 						  	</div>
 						</div>
 					</th>
 					<th>
 						<div class="dropdown">
-							Caller
-							<button class="btn dropdown-toggle-split dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<i class="fas fa-caret-down"></i>
+							<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Caller <i class="fas fa-caret-down"></i>
 						  	</button>
-							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-								<div class="btn-group dropright">
-									<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										Caller
-									</button>
-									<div class="dropdown-menu">
-										@foreach($callers as $caller)
-											<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="leadSource" data-filter-value="">{{ $caller->caller_name }} ({{ $caller->caller_number }})</button>
-										@endforeach
+							<div class="dropdown-menu" if="accordion" aria-labelledby="dropdownMenuButton">
+								<div class="card">
+									<div class="card-header" id="headingOne">
+										<button data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+											Caller
+										</button>
+									</div>
+									<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+										<div class="card-body">
+											@foreach($callers as $caller)
+												<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="leadSource" data-filter-value="">{{ $caller->caller_name }} ({{ $caller->caller_number }})</button>
+											@endforeach
+										</div>
 									</div>
 								</div>
-								<div class="btn-group dropright">
-									<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										City
-									</button>
-									<div class="dropdown-menu">
-										@foreach($cities as $city)
-											<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="leadSource" data-filter-value="">{{ $city->city }}</button>
-										@endforeach
+								<div class="card">
+									<div class="card-header" id="headingTwo">
+										<button data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+											City
+										</button>
+									</div>
+									<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+										<div class="card-body">
+											@foreach($cities as $city)
+												<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="leadSource" data-filter-value="">{{ $city->city }}</button>
+											@endforeach
+										</div>
 									</div>
 								</div>
 							</div>
@@ -76,35 +82,32 @@
 					</th>
 					<th>
 						<div class="dropdown">
-							Status
-						  	<button class="btn dropdown-toggle-split dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<i class="fas fa-caret-down"></i>
+						  	<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Status <i class="fas fa-caret-down"></i>
 						  	</button>
 						  	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-								<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="status" data-filter-value="completed">Completed</button>
-								<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="status" data-filter-value="no-answer">No Answer</button>
+								<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="status" data-filter-value="completed">Completed</button>
+								<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="status" data-filter-value="no-answer">No Answer</button>
 						  	</div>
 						</div>
 					</th>
 					<th>
-						Duration
-						<button class="btn dropdown-toggle-split dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<i class="fas fa-caret-down"></i>
+						<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Duration <i class="fas fa-caret-down"></i>
 						</button>
 					</th>
 					<th>
 						<div class="dropdown">
-							Date
-						  	<button class="btn dropdown-toggle-split dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<i class="fas fa-caret-down"></i>
+						  	<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Date<i class="fas fa-caret-down"></i>
 						  	</button>
 						  	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-								<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today() }}">Today</button>
-								<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today()->subWeek() }}">Past Week</button>
-								<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today()->subMonth() }}">Past Month</button>
-								<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today()->subMonths(3) }}">Past 3 Months</button>
-								<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today()->subMonths(6) }}">Past 6 Months</button>
-								<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today()->subYear() }}">Past Year</button>
+								<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today() }}">Today</button>
+								<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today()->subWeek() }}">Past Week</button>
+								<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today()->subMonth() }}">Past Month</button>
+								<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today()->subMonths(3) }}">Past 3 Months</button>
+								<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today()->subMonths(6) }}">Past 6 Months</button>
+								<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today()->subYear() }}">Past Year</button>
 								<input type="date">
 						  </div>
 						</div>
@@ -119,7 +122,7 @@
 										<br>
 										{{ $lead->number }}
 									@else
-										<strong>Tracking Number Deleted</strong>
+										<span style="color:#FD8099; font-weight: bold;">Tracking Number Deleted</span>
 									@endif								
 							</td>
 							<td class="lead-row-caller">
@@ -133,9 +136,9 @@
 							</td>
 							<td class="lead-row-status">
 								@if (!$lead->status)
-									No Answer
+									<i class="fas fa-times" style="color: #FD8099; width: 16px;"></i>&nbsp;No Answer
 								@else	
-									<span style="text-transform: capitalize">{{ $lead->status }}</span>
+									<i class="fas fa-check" style="color: #26DAD2;"></i>&nbsp;<span style="text-transform: capitalize">{{ $lead->status }}</span>
 								@endif
 							</td>	
 							<td class="lead-row-duration">{{ $lead->duration }}s</td>

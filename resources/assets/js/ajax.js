@@ -63,7 +63,7 @@ function ajaxRequest(e, filter, value){
 						leadSource = '<strong>' + val.description + '</strong><br>' + val.number;
 					}
 					else{
-						leadSource = '<strong>Tracking Number Deleted</strong>';
+						leadSource = '<span style="color:#FD8099; font-weight: bold;">Tracking Number Deleted</span>';
 					}
 
 					var caller_name;
@@ -78,9 +78,9 @@ function ajaxRequest(e, filter, value){
 					
 					var status;
 					if (!val.status){
-						status = "No Answer";
+						status = '<i class="fas fa-times" style="color: #FD8099; width: 16px;"></i>&nbsp;No Answer';
 					} else {
-						status = val.status;
+						status = '<i class="fas fa-check" style="color: #26DAD2;"></i>&nbsp;<span style="text-transform: capitalize">' + val.status;
 					}
 					
 					var duration = val.duration;
@@ -105,7 +105,7 @@ function ajaxRequest(e, filter, value){
 						'<td class="lead-row-duration">' +
 							duration + 's' +
 						'</td>' +
-						'<td class="date">' +
+						'<td class="lead-row-date">' +
 							date +
 						'</td>' +
 					'</tr>';
