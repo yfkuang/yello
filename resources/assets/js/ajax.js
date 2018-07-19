@@ -1,3 +1,7 @@
+/**
+ * Convert 24 hour format to 12 hour format
+ *
+ */
 function hours_am_pm(time) {
 	var hours = time[0] + time[1];
 	var min = time[3] + time[4];
@@ -10,35 +14,21 @@ function hours_am_pm(time) {
 	}
 }
 
-$(document).ready(function(){
-	$.ajaxSetup({//Setup X-CSRF-TOKEN verification
-		headers: {
-			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		}
-	});
-	
-	/**
-     * Display new data set based on button filter
-     *
-     */
-	$(".ajax-button").click(function(e){
+/**
+ * Display new data set based on button filter
+ *
+ */
+function ajaxRequest(e, filter, value){
 		e.preventDefault();
 		var dataString = {
             //_token: $(this).data('token'),
-			filter: $(this).data('filter-type'),
-			value: $(this).data('filter-value')
+			filter: filter,
+			value: value
         };
-		
+		console.log(dataString);
 		$.ajax({
 			type: "POST",
 			url: "/ajaxRequest",
-			/*beforeSend: function(xhr){
-				var token = $('meta[name="csrf-token"]').attr('content');
-
-				if (token) {
-					  return xhr.setRequestHeader('X-CSRF-TOKEN', token);
-				}
-			},*/
 			data: dataString,
 			success: function(data){
 				
@@ -48,11 +38,11 @@ $(document).ready(function(){
 				 *
 				 */
 				var statTotal = data.leads.length;
-				var answered = data.leads.filter(lead => lead.status = 'completed');
+				var answered = data.leads.filter(lead => lead.status);
 				var statAnswered = answered.length;
 				var unanswered = data.leads.filter(lead => !lead.status);
 				var statUnanswered = unanswered.length;
-				var statAnswerRate = statAnswered / statTotal * 100;
+				var statAnswerRate = Math.round(statAnswered / statTotal * 100);
 				
 				
 				$('#stat-total').text(statTotal);
@@ -73,7 +63,6 @@ $(document).ready(function(){
 						if(val.lead_source_id === source_val.id){
 							leadSource = '<strong>' + source_val.description + '</strong><br>' + source_val.number;
 						}
-						else if(val.lead_source_id !== source_val.id){}
 						else if(!val.lead_source_id){
 							leadSource = '<strong>Tracking Number Deleted</strong>';
 						}
@@ -86,7 +75,7 @@ $(document).ready(function(){
 						caller_name = val.caller_name;
 					}
 					
-					var caller_city = val.city;
+					var caller_city = val.city.toLowerCase();
 					var caller_number = val.caller_number;
 					
 					var status;
@@ -109,7 +98,7 @@ $(document).ready(function(){
 							leadSource +
 						'</td>' +
 						'<td class="lead-row-caller">' +
-							'<strong>' + caller_name + ', ' + caller_city + '</strong>' +
+							'<strong>' + caller_name + ', <span style="text-transform: capitalize">' + caller_city + '</span></strong>' +
 							'<br>' + caller_number +
 						'</td>' +
 						'<td class="lead-row-status">' +
@@ -130,5 +119,20 @@ $(document).ready(function(){
 				//console.log(dataString);
 			}
 		});
+	}
+
+$(document).ready(function(){
+	$.ajaxSetup({//Setup X-CSRF-TOKEN verification
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		}
+	});
+	
+	$(".ajax-button").click(function(e){
+		ajaxRequest(e, $(this).data('filter-type'), $(this).data('filter-value'));
+	});
+	
+	$(".ajax-text").keyup(function(e){
+		ajaxRequest(e, $(this).data('filter-type'), $(this).val());
 	});
 });

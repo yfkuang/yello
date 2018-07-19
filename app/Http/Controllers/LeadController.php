@@ -35,7 +35,9 @@ class LeadController extends Controller
         $context = [
             'leadSources' => LeadSource::all(),
 			'leads' => Lead::all()
-				->sortByDesc('created_at'), 
+				->sortByDesc('created_at'),
+			'callers' => Lead::groupBy('caller_number')->get(),
+			'cities' => Lead::groupBy('city')->get(),
             'appSid' => $this->_appSid()
         ];
 		
@@ -57,12 +59,21 @@ class LeadController extends Controller
      */
 	public function ajaxRequest(Request $request){
 		switch ($request->filter){
-			case "date":
+			case "leadSource":
 				$context = [
 					'leadSources' => LeadSource::all(),
-					'leads' => Lead::whereDate('created_at', '>=', $request->value)
+					'leads' => Lead::where('lead_source_id', '=', $request->value)
 						->orderBy('created_at', 'desc')
 						->get(),
+					'switch' => $request->filter
+				];
+				break;
+				
+			case "leadSourceDesc":
+				$context = [
+					'leadSources' => LeadSource::where('description', 'test5'),
+					'leads' => Lead::all()
+						->sortByDesc('created_at'),
 					'switch' => $request->filter
 				];
 				break;
@@ -90,10 +101,10 @@ class LeadController extends Controller
 				}
 				break;
 			
-			case "leadSource":
+			case "date":
 				$context = [
 					'leadSources' => LeadSource::all(),
-					'leads' => Lead::where('lead_source_id', '=', $request->value)
+					'leads' => Lead::whereDate('created_at', '>=', $request->value)
 						->orderBy('created_at', 'desc')
 						->get(),
 					'switch' => $request->filter

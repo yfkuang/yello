@@ -54,10 +54,10 @@ Route::get(
 );*/
 
 Route::get(
-    'dashboard',
-    ['as' => 'dashboard',
-     'uses' => 'LeadController@dashboard'
-    ]
+	'temp',
+	function () {
+		return view('lead_sources.temp');
+	}
 );
 
 Route::resource(

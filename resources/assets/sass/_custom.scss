@@ -1,2 +1,80 @@
-/* Scss Document */
+/*--------------
+//Header
+--------------*/
+.navbar{
+	min-height: 60px;
+	border: none;
+	box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
+	margin: 0;
+}
 
+.navbar-brand{
+	height: 60px;
+}
+
+.navbar-brand img{
+	height: 100%;
+	width: auto;
+}
+
+.navbar-nav{
+	float: right;
+}
+
+.navbar-nav li{
+	height: 60px;
+}
+
+.navbar-nav li a{
+	padding-top: calc((60px - 22px)/2);
+	padding-bottom: calc((60px - 22px)/2);
+}
+
+/*--------------
+//Tables
+--------------*/
+.table{
+	margin: 0px;
+}
+
+
+/*--------------
+//Misc
+--------------*/
+.table-section{
+	background: white;
+	padding: 40px;
+	margin: 60px 0;
+	border-radius: 0.5em;
+	box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
+}
+
+#stat-table tr{
+	padding: 10px 0;
+}
+
+#stat-table td{
+	line-height: 20pt;
+	border-top: none;
+	border-left: 1px solid rgb(221, 221, 221);
+	vertical-align: middle;
+	padding-left: 5%;
+}
+
+#stat-table td:first-of-type{
+	border: none;
+}
+
+.stat{
+	font-size: 32pt;
+}
+
+#stat-table .fas{
+	font-size: 32pt;
+	float: left;
+	margin-right: 15px;
+}
+
+.lead-row td{
+	padding: 15px 8px !important;
+}

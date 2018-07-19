@@ -1,36 +1,28 @@
 @extends('layouts.master')
 
 @section('content')
-	<div class="container">
-		<h2>Call tracking</h2>
+	<div class="table-section">
+		
 		<div class="row">
-			<h3>Add a new number</h3>
-			<p>Create a new lead source by purchasing a new phone number. Area code is optional</p>
-			{!! Form::open(['url' => route('available_number.index'), 'method' => 'GET']) !!}
-				{!! Form::label('areaCode', 'Area code: ') !!}
-				{!! Form::number('areaCode') !!}
-				{!! Form::submit('Search', ['class' => 'btn btn-primary btn-xs']) !!}
-			{!! Form::close() !!}
-			@include('lead_sources.index', ['leadSources' => $leadSources, 'appSid' => $appSid])
-		</div>
-		<div class="row">
-			<table class="table">
+			<table class="table" id="stat-table">
 				<tbody>
 					<td>
-						<span id="stat-total">{{ $leads->count() }}</span> Total Calls
+						<i class="fas fa-phone" style="color: #4D85FF"></i><span class="stat" id="stat-total">{{ $leads->count() }}</span><br> Total Calls
 					</td>
 					<td>
-						<span id="stat-answered">{{ $leads->where('status', 'completed')->count() }}</span> Answered Calls
+						<i class="fas fa-check" style="color: #26DAD2"></i><span class="stat" id="stat-answered">{{ $leads->where('status', 'completed')->count() }}</span><br> Answered Calls
 					</td>
 					<td>
-						<span id="stat-unanswered">{{ $leads->where('status', '!=', 'completed')->count() }}</span> Unanswered Calls
+						<i class="fas fa-times" style="color: #FD8099"></i><span class="stat" id="stat-unanswered">{{ $leads->where('status', '!=', 'completed')->count() }}</span><br> Unanswered Calls
 					</td>
 					<td>
-						<span id="stat-answer-rate">{{ round($leads->where('status', 'completed')->count()/$leads->count(), 2)*100 }}%</span> Answer Rate
+						<i class="fas fa-comment-alt" style="color: #F2CC53"></i><span class="stat" id="stat-answer-rate">{{ round($leads->where('status', 'completed')->count()/$leads->count(), 2)*100 }}%</span><br> Answer Rate
 					</td>
 				</tbody>
 			</table>
 		</div>
+	</div>
+	<div class="table-section">
 		<div class="row">
 			<table class="table" id="lead-table">
 				<thead>
@@ -40,13 +32,42 @@
 							Tracking Number
 						  </button>
 						  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<input type="text" class="ajax-text" placeholder="Description" data-token="{{ csrf_token() }}" data-filter-type="leadSourceDesc">
 								@foreach($leadSources as $leadSource)
 									<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="leadSource" data-filter-value="{{ $leadSource->id }}">{{ $leadSource->description }} ({{ $leadSource->number }})</button>
-							  	@endforeach
+								@endforeach
 						  </div>
 						</div>
 					</th>
-					<th>Caller</th>
+					<th>
+						<div class="dropdown">
+							<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Caller
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<div class="btn-group dropright">
+									<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										Caller
+									</button>
+									<div class="dropdown-menu">
+										@foreach($callers as $caller)
+											<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="leadSource" data-filter-value="">{{ $caller->caller_name }} ({{ $caller->caller_number }})</button>
+										@endforeach
+									</div>
+								</div>
+								<div class="btn-group dropright">
+									<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										City
+									</button>
+									<div class="dropdown-menu">
+										@foreach($cities as $city)
+											<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="leadSource" data-filter-value="">{{ $city->city }}</button>
+										@endforeach
+									</div>
+								</div>
+							</div>
+						</div>
+					</th>
 					<th>
 						<div class="dropdown">
 						  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -73,6 +94,7 @@
 							<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today()->subMonths(3) }}">Past 3 Months</button>
 							<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today()->subMonths(6) }}">Past 6 Months</button>
 							<button class="dropdown-item ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today()->subYear() }}">Past Year</button>
+							<input type="date">
 						  </div>
 						</div>
 					</th>
@@ -86,17 +108,18 @@
 										<strong>{{ $leadSource->description }}</strong>
 										<br>
 										{{ $leadSource->number }}
-									@elseif ($lead->lead_source_id != $leadSource->id)
-									@elseif (!$lead->lead_source_id)
+									@elseif (!DB::table('lead_sources')->where('id', '=', $lead->lead_source_id)->exists())
 										<strong>Tracking Number Deleted</strong>
+										@break
 									@endif
-								@endforeach							
+								@endforeach
+								
 							</td>
 							<td class="lead-row-caller">
 								@if (!$lead->caller_name)
-									<strong><em>No Caller ID</em>, {{ $lead->city }}</strong>
+									<strong><em>No Caller ID</em>, {{ ucwords(strtolower($lead->city)) }}</strong>
 								@else
-									<strong>{{ $lead->caller_name }}, {{ $lead->city }}</strong>
+									<strong>{{ $lead->caller_name }}, {{ ucwords(strtolower($lead->city)) }}</strong>
 								@endif
 								<br>
 								{{ $lead->caller_number }}
@@ -113,7 +136,7 @@
 								@php $date = explode(" ", $lead->created_at->toDayDateTimeString()); @endphp
 								<strong>{{ $date[4]." ".$date[5] }}</strong><br>
 								{{ $date[0]." ".$date[1]." ".$date[2]." ".$date[3] }}
-								
+
 							</td>
 						</tr>
 					@endforeach
