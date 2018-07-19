@@ -34,8 +34,21 @@ class LeadController extends Controller
     {
         $context = [
             'leadSources' => LeadSource::all(),
-			'leads' => Lead::all()
-				->sortByDesc('created_at'),
+			'leads' => Lead::leftJoin('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
+				->select(
+					'leads.id',
+					'leads.city',
+					'leads.caller_name',
+					'leads.caller_number',
+					'leads.duration',
+					'leads.status',
+					'leads.created_at',
+					'lead_sources.id as lead_source_id',
+					'lead_sources.number',
+					'lead_sources.description'
+				)
+				->orderBy('leads.created_at', 'desc')
+				->get(),
 			'callers' => Lead::groupBy('caller_number')->get(),
 			'cities' => Lead::groupBy('city')->get(),
             'appSid' => $this->_appSid()
@@ -63,6 +76,19 @@ class LeadController extends Controller
 				$context = [
 					'leadSources' => LeadSource::all(),
 					'leads' => Lead::where('lead_source_id', '=', $request->value)
+						->leftJoin('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
+						->select(
+							'leads.id',
+							'leads.city',
+							'leads.caller_name',
+							'leads.caller_number',
+							'leads.duration',
+							'leads.status',
+							'leads.created_at',
+							'lead_sources.id as lead_source_id',
+							'lead_sources.number',
+							'lead_sources.description'
+						)
 						->orderBy('created_at', 'desc')
 						->get(),
 					'switch' => $request->filter
@@ -71,9 +97,24 @@ class LeadController extends Controller
 				
 			case "leadSourceDesc":
 				$context = [
-					'leadSources' => LeadSource::where('description', 'test5'),
-					'leads' => Lead::all()
-						->sortByDesc('created_at'),
+					'leadSources' => LeadSource::all(),
+					'leads' => Lead::leftJoin('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
+						->select(
+							'leads.id',
+							'leads.city',
+							'leads.caller_name',
+							'leads.caller_number',
+							'leads.duration',
+							'leads.status',
+							'leads.created_at',
+							'lead_sources.id as lead_source_id',
+							'lead_sources.number',
+							'lead_sources.description'
+						)
+						->where('lead_sources.description', 'LIKE', '%'.$request->value.'%')
+						->orWhere('lead_sources.number', 'LIKE', '%'.$request->value.'%')
+						->orderBy('created_at', 'desc')
+						->get(),
 					'switch' => $request->filter
 				];
 				break;
@@ -84,6 +125,19 @@ class LeadController extends Controller
 						$context = [
 							'leadSources' => LeadSource::all(),
 							'leads' => Lead::where('status', 'completed')
+								->leftJoin('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
+									->select(
+										'leads.id',
+										'leads.city',
+										'leads.caller_name',
+										'leads.caller_number',
+										'leads.duration',
+										'leads.status',
+										'leads.created_at',
+										'lead_sources.id as lead_source_id',
+										'lead_sources.number',
+										'lead_sources.description'
+									)
 								->orderBy('created_at', 'desc')
 								->get(),
 							'switch' => $request->filter
@@ -93,6 +147,19 @@ class LeadController extends Controller
 						$context = [
 							'leadSources' => LeadSource::all(),
 							'leads' => Lead::where('status', '!=', 'completed')
+								->leftJoin('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
+								->select(
+									'leads.id',
+									'leads.city',
+									'leads.caller_name',
+									'leads.caller_number',
+									'leads.duration',
+									'leads.status',
+									'leads.created_at',
+									'lead_sources.id as lead_source_id',
+									'lead_sources.number',
+									'lead_sources.description'
+								)
 								->orderBy('created_at', 'desc')
 								->get(),
 							'switch' => $request->filter
@@ -104,7 +171,20 @@ class LeadController extends Controller
 			case "date":
 				$context = [
 					'leadSources' => LeadSource::all(),
-					'leads' => Lead::whereDate('created_at', '>=', $request->value)
+					'leads' => Lead::whereDate('leads.created_at', '>=', $request->value)
+						->leftJoin('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
+						->select(
+									'leads.id',
+									'leads.city',
+									'leads.caller_name',
+									'leads.caller_number',
+									'leads.duration',
+									'leads.status',
+									'leads.created_at',
+									'lead_sources.id as lead_source_id',
+									'lead_sources.number',
+									'lead_sources.description'
+								)
 						->orderBy('created_at', 'desc')
 						->get(),
 					'switch' => $request->filter

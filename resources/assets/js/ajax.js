@@ -59,15 +59,13 @@ function ajaxRequest(e, filter, value){
 				jQuery.each(data.leads, function(i, val){//Output rows based AJAX returned value
 					
 					var leadSource;
-					jQuery.each(data.leadSources, function(i, source_val){
-						if(val.lead_source_id === source_val.id){
-							leadSource = '<strong>' + source_val.description + '</strong><br>' + source_val.number;
-						}
-						else if(!val.lead_source_id){
-							leadSource = '<strong>Tracking Number Deleted</strong>';
-						}
-					});
-				
+					if(val.description){
+						leadSource = '<strong>' + val.description + '</strong><br>' + val.number;
+					}
+					else{
+						leadSource = '<strong>Tracking Number Deleted</strong>';
+					}
+
 					var caller_name;
 					if (!val.caller_name){
 						caller_name = "<em>No Caller ID</em>";

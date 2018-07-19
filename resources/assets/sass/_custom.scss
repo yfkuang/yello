@@ -39,12 +39,21 @@
 
 
 /*--------------
+//Footer
+--------------*/
+footer{
+	text-align: center;
+	padding-bottom: 20px;
+	margin-top: 40px;
+}
+
+/*--------------
 //Misc
 --------------*/
 .table-section{
 	background: white;
 	padding: 40px;
-	margin: 60px 0;
+	margin-top: 60px;
 	border-radius: 0.5em;
 	box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
 }
@@ -77,4 +86,10 @@
 
 .lead-row td{
 	padding: 15px 8px !important;
+}
+
+@media (min-width: 768px){
+	#stat-table td{
+		width: 25%;
+	}
 }

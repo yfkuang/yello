@@ -6,7 +6,7 @@
 		<meta name="csrf-token" content="{{ csrf_token() }}">
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
-        <title>Yello | Call Tracking by Leadlabs | @yield('title', 'Call tracking')</title>
+        <title>Yello | Call Tracking by Leadlabs | @yield('title')</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<!--<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>-->
 		<script src="{{ asset('js/app.js') }}"></script>
@@ -39,5 +39,10 @@
 		<div class="container">
         	@yield('content')
 		</div>
+		<footer>
+			<div class="container">
+				&copy; @php echo date('Y'); @endphp Leadlabs, LLC. All rights Reserved. <a>Privacy Policy</a> | <a>Terms</a>
+			</div>
+		</footer>
     </body>
 </html>
