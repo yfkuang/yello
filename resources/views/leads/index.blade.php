@@ -26,16 +26,17 @@
 			</table>
 		</div>
 	</div>
+
 	<div class="table-section">
 		<div class="row">
 			<table class="table" id="lead-table">
 				<thead>
 					<th class="lead-row-source">
 						<div class="dropdown">
-						 	<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						 	<button class="btn dropdown-toggle" data-toggle="dropdown">
 								Tracking Number <i class="fas fa-caret-down"></i>
 						  	</button>
-						  	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						  	<div class="dropdown-menu">
 								<input type="text" class="ajax-text" placeholder="Tracking # or description" data-token="{{ csrf_token() }}" data-filter-type="leadSourceDesc">
 								@foreach($leadSources as $leadSource)
 									<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="leadSource" data-filter-value="{{ $leadSource->id }}">{{ $leadSource->description }} ({{ $leadSource->number }})</button>
@@ -45,36 +46,26 @@
 					</th>
 					<th>
 						<div class="dropdown">
-							<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<button class="btn dropdown-toggle" data-toggle="dropdown">
 								Caller <i class="fas fa-caret-down"></i>
 						  	</button>
-							<div class="dropdown-menu" if="accordion" aria-labelledby="dropdownMenuButton">
-								<div class="card">
-									<div class="card-header" id="headingOne">
-										<button data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-											Caller
-										</button>
+							<div class="dropdown-menu custom-dropdown">
+								<div class="accordion">
+									<button class="btn" data-toggle="collapse" data-target="#collapse1">Caller</button>
+									<div class="collapse" id="collapse1" data-toggle="collapse">
+										@foreach($callers as $caller)
+											<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="leadSource" data-filter-value="">{{ $caller->caller_name }} ({{ $caller->caller_number }})</button>
+										@endforeach
 									</div>
-									<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-										<div class="card-body">
-											@foreach($callers as $caller)
-												<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="leadSource" data-filter-value="">{{ $caller->caller_name }} ({{ $caller->caller_number }})</button>
-											@endforeach
-										</div>
-									</div>
-								</div>
-								<div class="card">
-									<div class="card-header" id="headingTwo">
-										<button data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-											City
-										</button>
-									</div>
-									<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-										<div class="card-body">
-											@foreach($cities as $city)
-												<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="leadSource" data-filter-value="">{{ $city->city }}</button>
-											@endforeach
-										</div>
+									<button class="btn" data-toggle="collapse" data-target="#collapse2">City</button>
+									<div class="collapse" id="collapse2">
+										@foreach($cities as $city)
+											@if (!$city->city)
+												<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="leadSource" data-filter-value="">Unknown</button>
+											@else
+												<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="leadSource" data-filter-value="">{{ ucwords(strtolower($city->city)) }}</button>
+											@endif
+										@endforeach
 									</div>
 								</div>
 							</div>
@@ -82,26 +73,26 @@
 					</th>
 					<th>
 						<div class="dropdown">
-						  	<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						  	<button class="btn dropdown-toggle" data-toggle="dropdown">
 								Status <i class="fas fa-caret-down"></i>
 						  	</button>
-						  	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						  	<div class="dropdown-menu">
 								<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="status" data-filter-value="completed">Completed</button>
 								<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="status" data-filter-value="no-answer">No Answer</button>
 						  	</div>
 						</div>
 					</th>
 					<th>
-						<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<button class="btn dropdown-toggle" data-toggle="dropdown">
 							Duration <i class="fas fa-caret-down"></i>
 						</button>
 					</th>
 					<th>
 						<div class="dropdown">
-						  	<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						  	<button class="btn dropdown-toggle" data-toggle="dropdown">
 								Date<i class="fas fa-caret-down"></i>
 						  	</button>
-						  	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						  	<div class="dropdown-menu">
 								<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today() }}">Today</button>
 								<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today()->subWeek() }}">Past Week</button>
 								<button class="ajax-button" data-token="{{ csrf_token() }}" data-filter-type="date" data-filter-value="{{ \Carbon\Carbon::today()->subMonth() }}">Past Month</button>
@@ -127,7 +118,7 @@
 							</td>
 							<td class="lead-row-caller">
 								@if (!$lead->caller_name)
-									<strong><em>No Caller ID</em>, {{ ucwords(strtolower($lead->city)) }}</strong>
+									<strong><em>No Caller ID</em>, @if (!$lead->city) Unknown @else {{ ucwords(strtolower($lead->city)) }} @endif</strong>
 								@else
 									<strong>{{ $lead->caller_name }}, {{ ucwords(strtolower($lead->city)) }}</strong>
 								@endif

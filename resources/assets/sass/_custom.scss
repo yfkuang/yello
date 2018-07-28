@@ -1,15 +1,41 @@
 /*--------------
+//General
+--------------*/
+*{
+	box-sizing: border-box;
+}
+
+body{
+	color: #636b6f;
+}
+
+::-webkit-scrollbar-track {
+	background: rgba(0,0,0,0);
+	box-shadow: none;
+}
+
+/*--------------
 //Header
 --------------*/
-.navbar{
+.navbar-custom{
 	min-height: 60px;
 	border: none;
 	box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
 	margin: 0;
+	position: fixed;
+	width: 100vw;
+	z-index: 100;
+	background: #fff;
+	top: 0;
+}
+
+.navbar-header{
+	display: inline-block;
 }
 
 .navbar-brand{
 	height: 60px;
+	padding: 12px 0;
 }
 
 .navbar-brand img{
@@ -19,17 +45,39 @@
 
 .navbar-nav{
 	float: right;
+	display: table;
+	margin: 0;
+	padding-left: 0;
 }
 
 .navbar-nav li{
 	height: 60px;
+	display: block;
+	position: relative;
+	float: left;
 }
 
 .navbar-nav li a{
+	padding: 10px 15px;
 	padding-top: calc((60px - 22px)/2);
 	padding-bottom: calc((60px - 22px)/2);
+	display: block;
+	color: #636b6f;
 }
 
+.navbar-nav li a:hover{
+	text-decoration: none;
+	color: #212529;
+}
+
+.nav-addNumber{
+	border: 1px solid rgb(221, 221, 221);
+	padding: 5px 7px;
+	margin: 13px 0;
+	border-radius: 0.25rem;
+	background: none;
+	cursor: pointer;
+}
 /*--------------
 //Tables
 --------------*/
@@ -48,6 +96,29 @@ footer{
 }
 
 /*--------------
+//Bootstrap Customizations
+--------------*/
+.dropdown-toggle::after{
+	display: none;
+}
+
+.modal-title{
+	display: inline-block;
+}
+
+.carousel-indicators li{
+	background-color: #636b6f;
+}
+
+.carousel-indicators .active{
+	background-color: #212529;
+}
+
+.carousel-item{
+	height: 100%;
+}
+
+/*--------------
 //Misc
 --------------*/
 .table-section{
@@ -56,6 +127,10 @@ footer{
 	margin-top: 60px;
 	border-radius: 0.5em;
 	box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
+}
+
+.table-section:first-of-type{
+	margin-top: 120px;
 }
 
 #stat-table tr{
@@ -86,6 +161,7 @@ footer{
 
 #lead-table th{
 	border-left: 1px solid rgb(221, 221, 221);
+	border-top: none;
 	margin-bottom: 20px;
 }
 
@@ -117,12 +193,40 @@ footer{
 	max-width: 200px;
 }
 
-.lead-row-date{
-	text-align: right;
+#addNumber .modal-body{
+	height: 400px;
 }
 
-@media (min-width: 768px){
+#availableNumbers{
+	overflow-y: scroll;
+}
+
+.number-number, .number-locality{
+	width: 35%;
+}
+
+@include media-breakpoint-up(md) {
 	#stat-table td{
 		width: 25%;
+	}
+	
+	.lead-row-source{
+		width: 25%;
+	}
+	
+	.lead-row-caller{
+		width: 25%;
+	}
+	
+	.lead-row-status{
+		width: 15%;
+	}
+	
+	.lead-row-duration{
+		width: 15%;
+	}
+	
+	.lead-row-date{
+		width: 20%;
 	}
 }

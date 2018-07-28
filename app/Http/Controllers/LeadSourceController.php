@@ -19,7 +19,22 @@ class LeadSourceController extends Controller
     {
         $this->_twilioClient = $twilioClient;
     }
-
+	
+	/**
+     * Display a listing of lead sources
+     * @param Request $request
+     * @return Response with all found lead sources
+     */
+	public function manage(Request $request)
+    {
+        $context = [
+            'leadSources' => LeadSource::all(),
+            'appSid' => $this->_appSid(),
+        ];
+		
+        return response()->view('lead_sources.index', $context);
+    }
+	
     /**
      * Store a new lead source (i.e phone number) and redirect to edit
      * page
@@ -31,7 +46,7 @@ class LeadSourceController extends Controller
     {
         $appSid = $this->_appSid();
 
-        $phoneNumber = $request->input('phoneNumber');
+        $phoneNumber = $request->number;
 
         $this->_twilioClient->incomingPhoneNumbers
             ->create(
@@ -49,7 +64,7 @@ class LeadSourceController extends Controller
         );
         $leadSource->save();
 
-        return redirect()->route('lead_source.edit', [$leadSource]);
+		return response()->view('lead_source.edit', [$leadSource]);
     }
 
     /**

@@ -17,12 +17,22 @@ Route::get(
     }
 );
 
-Route::resource(
-    'available_number', 'AvailableNumberController', ['only' => ['index']]
+Route::get(
+    'dashboard',
+    ['as' => 'dashboard',
+     'uses' => 'LeadController@dashboard'
+    ]
+);
+
+Route::get(
+    'manage_numbers',
+	['as' => 'manage_numbers',
+     'uses' => 'LeadSourceController@manage'
+    ]
 );
 
 Route::resource(
-    'lead_source', 'LeadSourceController', ['except' => ['index', 'create', 'show']]
+    'available_number', 'AvailableNumberController', ['only' => ['index']]
 );
 
 Route::get(
@@ -39,27 +49,6 @@ Route::get(
 	]
 );
 
-/*Route::get(
-    'lead/summary-by-lead-source',
-    ['as' => 'lead.summary_by_lead_source',
-     'uses' => 'LeadController@summaryByLeadSource'
-    ]
-);
-
-Route::get(
-    'lead/summary-by-city',
-    ['as' => 'lead.summary_by_city',
-     'uses' => 'LeadController@summaryByCity'
-    ]
-);*/
-
-Route::get(
-	'temp',
-	function () {
-		return view('lead_sources.temp');
-	}
-);
-
 Route::resource(
     'lead', 'LeadController', ['only' => ['store']]
 );
@@ -68,5 +57,19 @@ Route::post(
 	'ajaxRequest',
 	['as' => 'ajaxRequest',
      'uses' => 'LeadController@ajaxRequest'
+    ]
+);
+
+Route::post(
+	'ajaxNumbers',
+	['as' => 'ajaxNumbers',
+     'uses' => 'AvailableNumberController@ajaxNumbers'
+    ]
+);
+
+Route::post(
+    'ajaxStore',
+	['as' => 'ajaxStore',
+     'uses' => 'LeadSourceController@store'
     ]
 );

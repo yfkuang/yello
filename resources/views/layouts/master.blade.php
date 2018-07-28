@@ -5,25 +5,28 @@
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<meta name="csrf-token" content="{{ csrf_token() }}">
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
+		<!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">-->
         <title>Yello | Call Tracking by Leadlabs | @yield('title')</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<!--<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>-->
 		<script src="{{ asset('js/app.js') }}"></script>
     </head>
     <body>
-        <nav class="navbar navbar-default">
+        <nav class="navbar-custom navbar-default">
 			<div class="container">
 				<div class="navbar-header">
 					<a class="navbar-brand" href="/"><img src="{{ asset('img/yello.png') }}"></a>
 				</div>
-				<div class="collapse navbar-collapse">
-					<ul class="nav navbar-nav">
-						<li><a href="{{ route('dashboard') }}">Dashboard</a></li>
-						<li><a href="" style="border: 1px solid rgb(221, 221, 221)
-; padding: 5px 7px; margin: 13px 0; border-radius: 0.25rem;">Add Number&nbsp;&nbsp;<i class="fas fa-plus-circle" style="color: #7CD164"></i></a></li>
-					</ul>
-				</div>
+				<ul class="nav navbar-nav">
+					<li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+					<li><button class="nav-addNumber" data-toggle="modal" data-target="#addNumber">Add Number&nbsp;&nbsp;<i class="fas fa-plus-circle" style="color: #7CD164"></i></button></li>
+					<li>
+						<a href="{{ route('manage_numbers') }}"><i class="fas fa-cog"></i></a>
+						<div>
+
+						</div>
+					</li>
+				</ul>
 			</div>
         </nav>
         <div class="errors">
@@ -37,12 +40,35 @@
                 </div>
             @endif
         </div>
+		
+		<!--Content-->
 		<div class="container">
         	@yield('content')
 		</div>
+		
+		<!--Add Number-->
+		<div class="modal fade" id="addNumber" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3 class="modal-title">Add Number</h3>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						@include('available_numbers.addNumber')
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
 		<footer>
 			<div class="container">
-				&copy; @php echo date('Y'); @endphp Leadlabs, LLC. All rights Reserved. <a>Privacy Policy</a> | <a>Terms</a>
+				&copy; @php echo date('Y'); @endphp Leadlabs, LLC. All rights Reserved. <a href="#">Privacy</a> | <a href="#">Terms</a>
 			</div>
 		</footer>
     </body>

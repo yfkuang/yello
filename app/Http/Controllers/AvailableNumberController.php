@@ -40,7 +40,33 @@ class AvailableNumberController extends Controller
             'available_numbers.index',
             [
                 'numbers' => $numbers,
-                'areaCode' => $areaCode
+                'areaCode' => $areaCode,
+            ]
+        );
+    }
+	
+	/**
+     * Display numbers available for purchase. Fetched from the API
+     *
+     * @param  Request $request
+     * @return Response
+     */
+    public function ajaxNumbers(Request $request)
+    {
+        $areaCode = $request->areaCode;
+
+        $numbers = $this->_twilioClient->availablePhoneNumbers('CA')
+            ->local->read(
+                [
+                    'areaCode' => $areaCode
+                ]
+            );
+		
+        return response()->view(
+            'available_numbers.index',
+            [
+                'numbers' => $numbers,
+                'areaCode' => $areaCode,
             ]
         );
     }

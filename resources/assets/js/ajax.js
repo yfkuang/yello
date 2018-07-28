@@ -73,7 +73,13 @@ function ajaxRequest(e, filter, value){
 						caller_name = val.caller_name;
 					}
 					
-					var caller_city = val.city.toLowerCase();
+					var caller_city;
+					if(!val.city){
+					    caller_city = 'Unknown';
+					} else {
+						caller_city = val.city.toLowerCase();	
+					}
+					
 					var caller_number = val.caller_number;
 					
 					var status;
@@ -119,6 +125,75 @@ function ajaxRequest(e, filter, value){
 		});
 	}
 
+/**
+ * Display new Available Numbers data set based on button filter
+ *
+ */
+function ajaxNumbers(e, areaCode){
+		e.preventDefault();
+		var dataString = {
+            //_token: $(this).data('token'),
+			areaCode: areaCode,
+        };
+	
+		console.log(dataString);
+		$.ajax({
+			type: "POST",
+			url: "/ajaxNumbers",
+			data: dataString,
+			success: function(data){
+				
+				/**
+				 *
+				 *Change values in Available Numbers table
+				 *
+				 */
+				$('.number-row').remove();//Remove previous data set
+				
+
+				$('#number-table tbody').append(data);
+				$('#number-table tbody').find('.btn').each(function(i){
+					$(this).click(function(e){
+						ajaxStore(e, $(this).val());
+					});
+				});
+				//console.log(data);
+			}
+		});
+	}
+
+/**
+ * Display new Available Numbers data set based on button filter
+ *
+ */
+function ajaxStore(e, number){
+		e.preventDefault();
+		var dataString = {
+            //_token: $(this).data('token'),
+			number: number,
+        };
+	
+		console.log(dataString);
+		$.ajax({
+			type: "POST",
+			url: "/ajaxStore",
+			data: dataString,
+			success: function(data){
+				
+				/**
+				 *
+				 *Change values in Available Numbers table
+				 *
+				 */
+				//$('.number-row').remove();//Remove previous data set
+				
+
+				//$('.number-edit').append(data);
+				console.log(data);
+			}
+		});
+	}
+
 $(document).ready(function(){
 	$.ajaxSetup({//Setup X-CSRF-TOKEN verification
 		headers: {
@@ -132,5 +207,9 @@ $(document).ready(function(){
 	
 	$(".ajax-text").keyup(function(e){
 		ajaxRequest(e, $(this).data('filter-type'), $(this).val());
+	});
+	
+	$(".ajax-numbers").click(function(e){
+		ajaxNumbers(e, $('#areaCode').val());
 	});
 });

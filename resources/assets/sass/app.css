@@ -1,23 +1,25 @@
 /*
-Error: File to import not found or unreadable: node_modules/bootstrap-sass/assets/stylesheets/bootstrap.
+Error: File to import not found or unreadable: ~bootstrap/scss/bootstrap.
        Load paths:
          C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/Configuration/SassFrameworks/bourbon
          C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/Configuration/SassFrameworks/neat
          C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/Configuration/SassFrameworks/base
-        on line 9 of C:\xampp\htdocs\yello\resources\assets\sass\app.scss
+        on line 10 of C:\xampp\htdocs\yello\resources\assets\sass\app.scss
 
-4: 
 5: // Variables
 6: @import "variables";
 7: 
 8: // Bootstrap
-9: @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
-10: 
-11: //Custom
-12: @import "custom";
+9: //@import "../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap.scss";
+10: @import "~bootstrap/scss/bootstrap";
+11: 
+12: //Font Awesome
+13: @import "~@fortawesome/fontawesome-free/scss/fontawesome";
+14: @import "~@fortawesome/fontawesome-free/scss/regular.scss";
+15: @import "~@fortawesome/fontawesome-free/scss/solid.scss";
 
 Backtrace:
-C:\xampp\htdocs\yello\resources\assets\sass\app.scss:9
+C:\xampp\htdocs\yello\resources\assets\sass\app.scss:10
 C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/ruby/lib/ruby/gems/2.4.0/gems/sass-3.5.3/lib/sass/tree/import_node.rb:67:in `rescue in import'
 C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/ruby/lib/ruby/gems/2.4.0/gems/sass-3.5.3/lib/sass/tree/import_node.rb:45:in `import'
 C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/ruby/lib/ruby/gems/2.4.0/gems/sass-3.5.3/lib/sass/tree/import_node.rb:28:in `imported_file'
@@ -54,4 +56,4 @@ C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/ruby/bin/sass:23:in `<main>'
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: File to import not found or unreadable: node_modules/bootstrap-sass/assets/stylesheets/bootstrap.\A        Load paths:\A          C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/Configuration/SassFrameworks/bourbon\A          C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/Configuration/SassFrameworks/neat\A          C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/Configuration/SassFrameworks/base\A         on line 9 of C:\xampp\htdocs\yello\resources\assets\sass\app.scss\A \A 4: \A 5: // Variables\A 6: @import \"variables\";\A 7: \A 8: // Bootstrap\A 9: @import \"node_modules/bootstrap-sass/assets/stylesheets/bootstrap\";\A 10: \A 11: //Custom\A 12: @import \"custom\";"; }
+  content: "Error: File to import not found or unreadable: ~bootstrap/scss/bootstrap.\A        Load paths:\A          C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/Configuration/SassFrameworks/bourbon\A          C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/Configuration/SassFrameworks/neat\A          C:/Program Files/Adobe/Adobe Dreamweaver CC 2018/Configuration/SassFrameworks/base\A         on line 10 of C:\xampp\htdocs\yello\resources\assets\sass\app.scss\A \A 5: // Variables\A 6: @import \"variables\";\A 7: \A 8: // Bootstrap\A 9: //@import \"../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap.scss\";\A 10: @import \"~bootstrap/scss/bootstrap\";\A 11: \A 12: //Font Awesome\A 13: @import \"~@fortawesome/fontawesome-free/scss/fontawesome\";\A 14: @import \"~@fortawesome/fontawesome-free/scss/regular.scss\";\A 15: @import \"~@fortawesome/fontawesome-free/scss/solid.scss\";"; }
