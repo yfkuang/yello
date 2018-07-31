@@ -35,6 +35,21 @@ class LeadSourceController extends Controller
         return response()->view('lead_sources.index', $context);
     }
 	
+	/**
+     * Display a listing of lead sources
+     * @param Request $request
+     * @return Response with all found lead sources
+     */
+	public function ajaxManage(Request $request)
+    {
+        $context = [
+            'leadSources' => LeadSource::all(),
+            'appSid' => $this->_appSid(),
+        ];
+		
+        return response()->view('lead_sources.leadsources', $context);
+    }
+	
     /**
      * Store a new lead source (i.e phone number) and redirect to edit
      * page
@@ -73,14 +88,15 @@ class LeadSourceController extends Controller
      * @param  int $id
      * @return Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        $leadSourceToEdit = LeadSource::find($id);
-
-        return response()->view(
+		$leadSource = LeadSource::find($request->id);
+		
+		return response()->json($leadSource);
+        /*return response()->view(
             'lead_sources.edit',
-            ['leadSource' => $leadSourceToEdit]
-        );
+            $content
+        );*/
     }
 
     /**
@@ -90,21 +106,22 @@ class LeadSourceController extends Controller
      * @param  int $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $this->validate(
             $request,
             [
                 'forwarding_number' => 'required',
-                'description' => 'required'
+                'description' => 'required',
+				'id' => 'required'
             ]
         );
 
-        $leadSourceToUpdate = LeadSource::find($id);
+        $leadSourceToUpdate = LeadSource::find($request->id);
         $leadSourceToUpdate->fill($request->all());
         $leadSourceToUpdate->save();
 
-        return redirect()->route('dashboard');
+        return response()->json('ye boi');
     }
 
     /**
@@ -113,9 +130,9 @@ class LeadSourceController extends Controller
      * @param  int $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $leadSourceToDelete = LeadSource::find($id);
+        $leadSourceToDelete = LeadSource::find($request->id);
         $phoneToDelete = $this->_twilioClient->incomingPhoneNumbers
             ->read(
                 [
@@ -128,7 +145,7 @@ class LeadSourceController extends Controller
         }
         $leadSourceToDelete->delete();
 
-        return redirect()->route('dashboard');
+        return response()->json('ye boi');
     }
 	
     /**

@@ -18,7 +18,7 @@
 			</table>
 		</div>
 		<div class="carousel-item" id="number-edit">
-			
+			@include('lead_sources.edit')
 		</div>
 	</div>
 </div>

@@ -152,6 +152,11 @@ function ajaxNumbers(e, areaCode){
 				
 
 				$('#number-table tbody').append(data);
+				
+				//Replace Modal window title
+				$('.modal-title').text('Available Numbers');
+				
+				//Create event handleer for clicking on "Purchase" button
 				$('#number-table tbody').find('.btn').each(function(i){
 					$(this).click(function(e){
 						ajaxStore(e, $(this).val());
@@ -182,17 +187,146 @@ function ajaxStore(e, number){
 				
 				/**
 				 *
-				 *Change values in Available Numbers table
+				 *Change values in Edit Nuber module
 				 *
 				 */
-				//$('.number-row').remove();//Remove previous data set
 				
-
-				//$('.number-edit').append(data);
 				console.log(data);
 			}
 		});
 	}
+
+/**
+ * Replace Modal with edit options
+ *
+ */
+function ajaxEdit(e, id){
+		e.preventDefault();
+		var dataString = {
+            //_token: $(this).data('token'),
+			id: id,
+        };
+	
+		console.log(dataString);
+		$.ajax({
+			type: "POST",
+			url: "/ajaxEdit",
+			data: dataString,
+			success: function(data){
+				
+				/**
+				 *
+				 *Change values in Edit Nuber module
+				 *
+				 */
+				
+				//Set Variables
+				var id = data.id;
+				var number = data.number;
+				var description = data.description;
+				var forwardingNumber = data.forwarding_number;
+				
+				//Replace Modal window title
+				$('.modal-title').text('Edit Number');
+				
+				//Replace form with values requested from AJAX
+				$('.edit-number').text('Number: ' + number);
+				$('input[name=edit-description]').val(description);
+				$('input[name=edit-forwarding-number]').val(forwardingNumber);
+				$('.ajax-save').val(id);
+				$('.ajax-delete').val(id);
+				
+				//console.log(data);
+			}
+		});
+	}
+
+function ajaxSave(e, id, description, forwarding_number){
+	e.preventDefault();
+	var dataString = {
+		//_token: $(this).data('token'),
+		id: id,
+		description: description,
+		forwarding_number: forwarding_number,
+	};
+
+	console.log(dataString);
+	$.ajax({
+		type: "POST",
+		url: "/ajaxSave",
+		data: dataString,
+		success: function(data){
+
+			/**
+			 *
+			 *Change values in Edit Nuber module
+			 *
+			 */
+			$('#addNumber').modal('hide');//Close Modal Window
+			ajaxLeadSources(e);
+			console.log(data);
+		}
+	});
+}
+
+function ajaxDelete(e, id){
+	e.preventDefault();
+	var dataString = {
+		//_token: $(this).data('token'),
+		id: id,
+	};
+
+	console.log(dataString);
+	$.ajax({
+		type: "POST",
+		url: "/ajaxDelete",
+		data: dataString,
+		success: function(data){
+
+			/**
+			 *
+			 *Change values in Edit Nuber module
+			 *
+			 */
+			$('#addNumber').modal('hide');//Close Modal Window
+			ajaxLeadSources(e);
+			console.log(data);
+		}
+	});
+}
+
+function ajaxLeadSources(e){
+	e.preventDefault();
+	var dataString = {
+		//_token: $(this).data('token'),
+	};
+
+	console.log(dataString);
+	$.ajax({
+		type: "POST",
+		url: "/ajaxLeadSources",
+		data: dataString,
+		success: function(data){
+
+			/**
+			 *
+			 *Change values in Edit Nuber module
+			 *
+			 */
+			$('.leadsources-row').remove();//Remove previous data set
+			$('#leadsources-table tbody').append(data);
+			
+			$('#leadsources-table tbody').find('.btn').each(function(i){
+				$(this).click(function(e){
+					ajaxEdit(e, $(this).data('id'));
+					$('#modalCarousel').carousel(2);
+					$('#modalCarousel').carousel('pause');
+				});
+			});
+			//console.log(data);
+		}
+	});
+}
 
 $(document).ready(function(){
 	$.ajaxSetup({//Setup X-CSRF-TOKEN verification
@@ -209,7 +343,24 @@ $(document).ready(function(){
 		ajaxRequest(e, $(this).data('filter-type'), $(this).val());
 	});
 	
+	$('.nav-addNumber').click(function(e){
+		e.preventDefault();
+		$('.modal-title').text('Add Number');
+	});
+	
 	$(".ajax-numbers").click(function(e){
 		ajaxNumbers(e, $('#areaCode').val());
+	});
+	
+	$(".ajax-edit-number").click(function(e){
+		ajaxEdit(e, $(this).data('id'));
+	});
+	
+	$(".ajax-save").click(function(e){
+		ajaxSave(e, $(this).val(), $('input[name=edit-description]').val(), $('input[name=edit-forwarding-number]').val());
+	});
+	
+	$(".ajax-delete").click(function(e){
+		ajaxDelete(e, $(this).val());
 	});
 });

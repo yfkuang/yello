@@ -73,3 +73,31 @@ Route::post(
      'uses' => 'LeadSourceController@store'
     ]
 );
+
+Route::post(
+    'ajaxEdit',
+	['as' => 'ajaxEdit',
+     'uses' => 'LeadSourceController@edit'
+    ]
+);
+
+Route::post(
+    'ajaxSave',
+	['as' => 'ajaxSave',
+     'uses' => 'LeadSourceController@update'
+    ]
+);
+
+Route::post(
+    'ajaxDelete',
+	['as' => 'ajaxDelete',
+     'uses' => 'LeadSourceController@destroy'
+    ]
+);
+
+Route::post(
+    'ajaxLeadSources',
+	['as' => 'ajaxLeadSources',
+     'uses' => 'LeadSourceController@ajaxManage'
+    ]
+);

@@ -18,16 +18,7 @@
 				<th></th>
 			</thead>
 			<tbody>
-				@foreach ($leadSources as $leadSource)
-					<tr>
-						<td> {{ $leadSource->description }} </td>
-						<td> {{ $leadSource->number }} </td>
-						<td> {{ $leadSource->forwarding_number }} </td>
-						<td>
-							{!! Form::button('Edit', ['class' => 'btn', 'data-toggle' => "modal", 'data-target' => "#addNumber"]) !!}
-						</td>
-					</tr>
-				@endforeach
+				@include('lead_sources.leadsources')
 			</tbody>
 		</table>
 	</div>

@@ -12,4 +12,9 @@ $(document).ready(function(){
 		$('#modalCarousel').carousel(0);
 		$('#modalCarousel').carousel('pause');
 	});
+	
+	$('.ajax-edit-number').on('click', function(){
+		$('#modalCarousel').carousel(2);
+		$('#modalCarousel').carousel('pause');
+	});
 });
