@@ -53,6 +53,10 @@ Route::resource(
     'lead', 'LeadController', ['only' => ['store']]
 );
 
+/*Firebase SDK*/
+Route::get('/phpfirebase_sdk','FirebaseController@index');
+
+/*AJAX Requests*/
 Route::post(
 	'ajaxRequest',
 	['as' => 'ajaxRequest',

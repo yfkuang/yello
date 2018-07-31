@@ -1,13 +1,18 @@
 @extends('layouts.master')
 
 @section('title')
-	Manage Numbers
+	Manage My Tracking Numbers
 @stop
 
 @section('content')
 <div class="table-section">
 	<div class="row">
-		<h1>Tracking Number</h1>
+		<div class="col-10">
+			<h1>My Tracking Numbers</h1>
+		</div>
+		<div class="col-2">
+			<button class="nav-addNumber" data-toggle="modal" data-target="#addNumber">Add Number&nbsp;&nbsp;<i class="fas fa-plus-circle" style="color: #fff"></i></button>
+		</div>
 	</div>
 	<div class="row">
 		<table class="table" id="leadsources-table">

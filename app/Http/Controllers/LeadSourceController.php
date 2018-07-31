@@ -79,7 +79,7 @@ class LeadSourceController extends Controller
         );
         $leadSource->save();
 
-		return response()->view('lead_source.edit', [$leadSource]);
+		return response()->json($leadSource);
     }
 
     /**

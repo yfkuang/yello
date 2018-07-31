@@ -187,9 +187,25 @@ function ajaxStore(e, number){
 				
 				/**
 				 *
-				 *Change values in Edit Nuber module
+				 *Change values in Edit Number module
 				 *
 				 */
+				
+				//Set Variables
+				var id = data.id;
+				var number = data.number;
+				var description = data.description;
+				var forwardingNumber = data.forwarding_number;
+				
+				//Replace Modal window title
+				$('.modal-title').text('Edit Number');
+				
+				//Replace form with values requested from AJAX
+				$('.edit-number').text('Number: ' + number);
+				$('input[name=edit-description]').val(description);
+				$('input[name=edit-forwarding-number]').val(forwardingNumber);
+				$('.ajax-save').val(id);
+				$('.ajax-delete').val(id);
 				
 				console.log(data);
 			}
@@ -216,7 +232,7 @@ function ajaxEdit(e, id){
 				
 				/**
 				 *
-				 *Change values in Edit Nuber module
+				 *Change values in Edit Number module
 				 *
 				 */
 				
