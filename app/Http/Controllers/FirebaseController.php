@@ -7,6 +7,8 @@ use Kreait\Firebase;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Database;
+use Kreait\Firebase\Auth;
+use Firebase\Auth\Token\Exception\InvalidToken;
 
 class FirebaseController extends Controller
 {
@@ -36,6 +38,28 @@ class FirebaseController extends Controller
 
 		print_r($newPost->getvalue());
 	}
-}
+	
+	public function login(Request $request){
+		$serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/yello-d136a-85673659caee.json');
 
+		$firebase = (new Factory)
+			->withServiceAccount($serviceAccount)
+			->create();
+		
+		$idTokenString = '..';
+		
+		try {
+			$verifiedIdToken = $firebase->getAuth()->verifyIdToken($idTokenString);
+		} catch (InvalidToken $e) {
+			echo $e->getMessage();
+		}
+
+		$uid = $verifiedIdToken->getClaim('sub');
+		$user = $firebase->getAuth()->getUser($uid);
+
+			
+		
+		return response()->view('firebase.index');
+	}
+}	
 ?>

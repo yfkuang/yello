@@ -11,6 +11,7 @@ use Twilio\Rest\Client;
 use Twilio\Twiml;
 use SimpleXMLElement;
 use Carbon\Carbon;
+use Kreait\Firebase\Auth;
 
 class LeadController extends Controller
 {
@@ -32,6 +33,7 @@ class LeadController extends Controller
      */
     public function dashboard(Request $request)
     {
+		if(Auth::verifyIdToken())
         $context = [
             'leadSources' => LeadSource::all(),
 			'leads' => Lead::leftJoin('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')

@@ -12,9 +12,10 @@
 */
 
 Route::get(
-    '/', function () {
-        return redirect(route('dashboard'));
-    }
+    '/',
+	['as' => 'login',
+     'uses' => 'FirebaseController@login'
+    ]
 );
 
 Route::get(
