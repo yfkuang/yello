@@ -7,7 +7,7 @@ use App\Lead;
 
 class LeadSource extends Model
 {
-    protected $fillable = ['number', 'forwarding_number', 'description'];
+    protected $fillable = ['number', 'forwarding_number', 'description','user_id'];
 
     public function leads()
     {

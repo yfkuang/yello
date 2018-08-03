@@ -3,14 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
+use App\Http\Controllers\FirebaseController;
 use App\Lead;
 use App\LeadSource;
+use App\User;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 use Twilio\Rest\Client;
 use Twilio\Twiml;
 use SimpleXMLElement;
 use Carbon\Carbon;
+use Kreait\Firebase;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Auth;
 
 class LeadController extends Controller
@@ -33,30 +39,42 @@ class LeadController extends Controller
      */
     public function dashboard(Request $request)
     {
-		if(Auth::verifyIdToken())
-        $context = [
-            'leadSources' => LeadSource::all(),
-			'leads' => Lead::leftJoin('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
-				->select(
-					'leads.id',
-					'leads.city',
-					'leads.caller_name',
-					'leads.caller_number',
-					'leads.duration',
-					'leads.status',
-					'leads.created_at',
-					'lead_sources.id as lead_source_id',
-					'lead_sources.number',
-					'lead_sources.description'
-				)
-				->orderBy('leads.created_at', 'desc')
-				->get(),
-			'callers' => Lead::groupBy('caller_number')->get(),
-			'cities' => Lead::groupBy('city')->get(),
-            'appSid' => $this->_appSid()
-        ];
+		$token = session('token');
 		
-        return response()->view('leads.index', $context);
+		if(!$token){
+			return redirect()->route('index');
+		} else {
+			$uid = FirebaseController::verifyToken($token);
+			$user = User::where('firebase_id', '=', $uid)->first();
+		
+			$context = [
+				'leadSources' => LeadSource::where('lead_sources.user_id', '=', $user->id)
+					->get(),
+				'leads' => Lead::leftJoin('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
+					->select(
+						'leads.id',
+						'leads.city',
+						'leads.caller_name',
+						'leads.caller_number',
+						'leads.duration',
+						'leads.status',
+						'leads.created_at',
+						'lead_sources.id as lead_source_id',
+						'lead_sources.number',
+						'lead_sources.description'
+					)
+					->where('leads.user_id', '=', $user->id)
+					->orderBy('leads.created_at', 'desc')
+					->get(),
+				'callers' => Lead::groupBy('caller_number')->get(),
+				'cities' => Lead::groupBy('city')->get(),
+				'appSid' => $this->_appSid(),
+				'uid' => $uid,
+				'token' => $token
+			];
+
+			return response()->view('leads.index', $context);
+		}
     }
 	
 	/*Parse Phone numbers into a more user friendly format*/
@@ -73,11 +91,16 @@ class LeadController extends Controller
      * @return Response with all filtered leads
      */
 	public function ajaxRequest(Request $request){
+		$token = session('token');
+		$uid = FirebaseController::verifyToken($token);
+		$user = User::where('firebase_id', '=', $uid)->first();
+		
 		switch ($request->filter){
 			case "leadSource":
 				$context = [
 					'leadSources' => LeadSource::all(),
 					'leads' => Lead::where('lead_source_id', '=', $request->value)
+						->where('leads.user_id', '=', $user->id)
 						->leftJoin('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
 						->select(
 							'leads.id',
@@ -101,6 +124,7 @@ class LeadController extends Controller
 				$context = [
 					'leadSources' => LeadSource::all(),
 					'leads' => Lead::leftJoin('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
+					->where('leads.user_id', '=', $user->id)
 						->select(
 							'leads.id',
 							'leads.city',
@@ -127,19 +151,20 @@ class LeadController extends Controller
 						$context = [
 							'leadSources' => LeadSource::all(),
 							'leads' => Lead::where('status', 'completed')
+								->where('leads.user_id', '=', $user->id)
 								->leftJoin('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
-									->select(
-										'leads.id',
-										'leads.city',
-										'leads.caller_name',
-										'leads.caller_number',
-										'leads.duration',
-										'leads.status',
-										'leads.created_at',
-										'lead_sources.id as lead_source_id',
-										'lead_sources.number',
-										'lead_sources.description'
-									)
+								->select(
+									'leads.id',
+									'leads.city',
+									'leads.caller_name',
+									'leads.caller_number',
+									'leads.duration',
+									'leads.status',
+									'leads.created_at',
+									'lead_sources.id as lead_source_id',
+									'lead_sources.number',
+									'lead_sources.description'
+								)
 								->orderBy('created_at', 'desc')
 								->get(),
 							'switch' => $request->filter
@@ -149,6 +174,7 @@ class LeadController extends Controller
 						$context = [
 							'leadSources' => LeadSource::all(),
 							'leads' => Lead::where('status', '!=', 'completed')
+								->where('leads.user_id', '=', $user->id)
 								->leftJoin('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
 								->select(
 									'leads.id',
@@ -174,6 +200,7 @@ class LeadController extends Controller
 				$context = [
 					'leadSources' => LeadSource::all(),
 					'leads' => Lead::whereDate('leads.created_at', '>=', $request->value)
+						->where('leads.user_id', '=', $user->id)
 						->leftJoin('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
 						->select(
 									'leads.id',
@@ -217,6 +244,7 @@ class LeadController extends Controller
         $lead->caller_number = $request->input('From');
         $lead->caller_name = $request->input('CallerName');
         $lead->call_sid = $request->input('CallSid');
+		$lead->user_id = $leadSource->user_id;
 
         $lead->save();
 		

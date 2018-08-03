@@ -6,10 +6,11 @@
 
 @section('content')
 	<div class="table-section">
-		{{ Form::open(['route' => 'dashboard', 'method' => 'POST']) }}
+		{{ Form::open(['route' => 'login', 'method' => 'POST', 'class' => 'login-form']) }}
 			{!! Form::text('email', '', ['placeholder' => 'Email']) !!}
 			{!! Form::password('password',['placeholder' => 'Password']) !!}
-			{!! Form::submit('Login', ['class' => 'btn btn-primary']) !!}
+			{!! Form::hidden('tokenID') !!}
+			{!! Form::button('Login', ['class' => 'btn btn-primary login']) !!}
 		{{ Form::close() }}
 	</div>
 @stop

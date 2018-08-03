@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\LeadSource;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 use Twilio\Rest\Client;
 
 class LeadSourceController extends Controller
@@ -27,12 +29,25 @@ class LeadSourceController extends Controller
      */
 	public function manage(Request $request)
     {
-        $context = [
-            'leadSources' => LeadSource::all(),
-            'appSid' => $this->_appSid(),
-        ];
+		$token = session('token');
 		
-        return response()->view('lead_sources.index', $context);
+		if(!$token){
+			return redirect()->route('index');
+		} else {
+			$uid = FirebaseController::verifyToken($token);
+			$user = User::where('firebase_id', '=', $uid)->first();
+			
+			$context = [
+				'leadSources' => LeadSource::where('lead_sources.user_id', '=', $user->id)
+					->get(),
+				'appSid' => $this->_appSid(),
+				'uid' => $uid,
+				'token' => $token
+				
+			];
+
+			return response()->view('lead_sources.index', $context);
+		}
     }
 	
 	/**
@@ -42,8 +57,12 @@ class LeadSourceController extends Controller
      */
 	public function ajaxManage(Request $request)
     {
+		$token = session('token');
+		$uid = FirebaseController::verifyToken($token);
+		$user = User::where('firebase_id', '=', $uid)->first();
         $context = [
-            'leadSources' => LeadSource::all(),
+            'leadSources' => LeadSource::where('lead_sources.user_id', '=', $user->id)
+					->get(),
             'appSid' => $this->_appSid(),
         ];
 		
@@ -60,6 +79,9 @@ class LeadSourceController extends Controller
     public function store(Request $request)
     {
         $appSid = $this->_appSid();
+		$token = session('token');
+		$uid = FirebaseController::verifyToken($token);
+		$user = User::where('firebase_id', '=', $uid)->first();
 
         $phoneNumber = $request->number;
 
@@ -74,7 +96,8 @@ class LeadSourceController extends Controller
 
         $leadSource = new LeadSource(
             [
-                'number' => $phoneNumber
+                'number' => $phoneNumber,
+				'user_id' => $user->id
             ]
         );
         $leadSource->save();

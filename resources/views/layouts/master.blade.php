@@ -7,26 +7,23 @@
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 		<!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">-->
         <title>Yello | @yield('title')</title>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		<!--<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>-->
-		<script src="{{ asset('js/app.js') }}"></script>
     </head>
     <body>
         <nav class="navbar-custom navbar-default">
 			<div class="container">
 				<div class="navbar-header">
-					<a class="navbar-brand" href="/"><img src="{{ asset('img/yello.png') }}"></a>
+					<a class="navbar-brand" href="{{ route('index') }}"><img src="{{ asset('img/yello.png') }}"></a>
 				</div>
+				@if($uid)
 				<ul class="nav navbar-nav">
 					<li><a href="{{ route('dashboard') }}">Dashboard</a></li>
 					<li><button class="nav-addNumber" data-toggle="modal" data-target="#addNumber">Add Number&nbsp;&nbsp;<i class="fas fa-plus-circle" style="color: #7CD164"></i></button></li>
 					<li>
 						<a href="{{ route('manage_numbers') }}"><i class="fas fa-cog"></i></a>
-						<div>
-
-						</div>
 					</li>
+					<li>{{ Form::open(['route' => 'login', 'method' => 'POST', 'class' => 'logout-form']) }}{!! Form::hidden('tokenID') !!}{!! Form::button('Logout', ['class' => 'btn btn-primary logout']) !!}{{ Form::close() }}</li>
 				</ul>
+				@endif
 			</div>
         </nav>
         <div class="errors">
@@ -71,5 +68,8 @@
 				&copy; @php echo date('Y'); @endphp Leadlabs, LLC. All rights Reserved. <a href="#">Privacy</a> | <a href="#">Terms</a>
 			</div>
 		</footer>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<!--<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>-->
+		<script src="{{ asset('js/app.js') }}"></script>
     </body>
 </html>

@@ -13,6 +13,13 @@
 
 Route::get(
     '/',
+	['as' => 'index',
+     'uses' => 'FirebaseController@login'
+    ]
+);
+
+Route::post(
+    '/',
 	['as' => 'login',
      'uses' => 'FirebaseController@login'
     ]
@@ -26,7 +33,7 @@ Route::get(
 );
 
 Route::get(
-    'manage_numbers',
+    'manage',
 	['as' => 'manage_numbers',
      'uses' => 'LeadSourceController@manage'
     ]

@@ -5,14 +5,11 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-window.$ = window.jQuery = require('jquery');
-window.Popper = require('popper.js');
-//require('../../../node_modules/bootstrap/dist/js/bootstrap.js');
-//require('../../../node_modules/bootstrap-sass/assets/javascripts/bootstrap.js');
+window.$ = window.jQuery = require('jquery');//Hack to prevent jQuery errors on custom Bootstrap functions
+//window.Popper = require('popper.js');//Don't remember why this was included
 require('bootstrap');
 require('./ajax.js');
 require('./custom.js');
-
 //window.Vue = require('vue');
 
 /**

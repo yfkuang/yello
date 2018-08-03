@@ -3,3 +3,4 @@
 composer /twilio
 composer /firebase
 npm /bootstrap
+npm /firebase
